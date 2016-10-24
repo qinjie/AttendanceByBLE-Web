@@ -1,6 +1,7 @@
 # Attendance Taking: Database Reference
 
 ## Database
+- Database URL: ```188.166.247.154/phpmyadmin```
 - Database name: ```atk_ble```
 - Database user:
 ```

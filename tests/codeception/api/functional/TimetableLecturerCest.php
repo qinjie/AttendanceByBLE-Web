@@ -23,7 +23,7 @@ class TimetableLecturerCest
     {
         $I->wantTo('get my lecturer timetable of today');
         $I->sendGET('v1/attendance/day', [
-            'expand' => 'lesson'
+            'expand' => 'lesson,venue'
         ]);
         $I->seeResponseCodeIs(200);
         $userId = $I->grabFromDatabase('user', 'id', [
@@ -53,6 +53,10 @@ class TimetableLecturerCest
                 'start_time' => 'string',
                 'end_time' => 'string',
                 'meeting_pattern' => 'string'
+            ],
+            'venue' => [
+                'location' => 'string',
+                'name' => 'string'
             ]
         ], '$[*]');
     }
@@ -62,7 +66,7 @@ class TimetableLecturerCest
         $I->wantTo('get my lecturer timetable of an arbitrary day');
         $I->sendGET('v1/attendance/day', [
             'recorded_date' => '2016-10-12',
-            'expand' => 'lesson'
+            'expand' => 'lesson,venue'
         ]);
         $I->seeResponseCodeIs(200);
         $userId = $I->grabFromDatabase('user', 'id', [
@@ -92,6 +96,10 @@ class TimetableLecturerCest
                 'start_time' => 'string',
                 'end_time' => 'string',
                 'meeting_pattern' => 'string'
+            ],
+            'venue' => [
+                'location' => 'string',
+                'name' => 'string'
             ]
         ], '$[*]');
     }
@@ -100,7 +108,7 @@ class TimetableLecturerCest
     {
         $I->wantTo('get my lecturer timetable of current week');
         $I->sendGET('v1/attendance/week', [
-            'expand' => 'lesson'
+            'expand' => 'lesson,venue'
         ]);
         $I->seeResponseCodeIs(200);
         $userId = $I->grabFromDatabase('user', 'id', [
@@ -133,6 +141,10 @@ class TimetableLecturerCest
                 'start_time' => 'string',
                 'end_time' => 'string',
                 'meeting_pattern' => 'string'
+            ],
+            'venue' => [
+                'location' => 'string',
+                'name' => 'string'
             ]
         ], '$[*]');
     }
@@ -142,7 +154,7 @@ class TimetableLecturerCest
         $I->wantTo('get my lecturer timetable of current week');
         $I->sendGET('v1/attendance/week', [
             'weekNumber' => 1,
-            'expand' => 'lesson'
+            'expand' => 'lesson,venue'
         ]);
         $I->seeResponseCodeIs(200);
         $userId = $I->grabFromDatabase('user', 'id', [
@@ -174,6 +186,10 @@ class TimetableLecturerCest
                 'start_time' => 'string',
                 'end_time' => 'string',
                 'meeting_pattern' => 'string'
+            ],
+            'venue' => [
+                'location' => 'string',
+                'name' => 'string'
             ]
         ], '$[*]');
     }
@@ -182,7 +198,7 @@ class TimetableLecturerCest
     {
         $I->wantTo('get my lecturer timetable of current semester');
         $I->sendGET('v1/attendance/semester', [
-            'expand' => 'lesson,student'
+            'expand' => 'lesson,student,venue'
         ]);
         $I->seeResponseCodeIs(200);
         $userId = $I->grabFromDatabase('user', 'id', [
@@ -219,6 +235,10 @@ class TimetableLecturerCest
                 'name' => 'string',
                 'acad' => 'string',
                 'user_id' => 'integer'
+            ],
+            'venue' => [
+                'location' => 'string',
+                'name' => 'string'
             ]
         ], '$[*]');
     }
@@ -228,7 +248,7 @@ class TimetableLecturerCest
         $I->wantTo('get my lecturer timetable for a class of current semester');
         $I->sendGET('v1/attendance/semester', [
             'class_section' => 'LL12',
-            'expand' => 'lesson,student'
+            'expand' => 'lesson,student,venue'
         ]);
         $I->seeResponseCodeIs(200);
         $userId = $I->grabFromDatabase('user', 'id', [
@@ -266,6 +286,10 @@ class TimetableLecturerCest
                 'name' => 'string',
                 'acad' => 'string',
                 'user_id' => 'integer'
+            ],
+            'venue' => [
+                'location' => 'string',
+                'name' => 'string'
             ]
         ], '$[*]');
     }
@@ -275,7 +299,7 @@ class TimetableLecturerCest
         $I->wantTo('get my lecturer timetable for a day of current semester');
         $I->sendGET('v1/attendance/semester', [
             'fromDate' => '2016-10-05',
-            'expand' => 'lesson,student'
+            'expand' => 'lesson,student,venue'
         ]);
         $I->seeResponseCodeIs(200);
         $userId = $I->grabFromDatabase('user', 'id', [
@@ -312,6 +336,10 @@ class TimetableLecturerCest
                 'name' => 'string',
                 'acad' => 'string',
                 'user_id' => 'integer'
+            ],
+            'venue' => [
+                'location' => 'string',
+                'name' => 'string'
             ]
         ], '$[*]');
     }

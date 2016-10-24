@@ -28,6 +28,10 @@ Attendance Taking server provides the following list of API
 - [Take attendance by face for student](#post-attendanceface)
 - [Update attendance of student for lecturer](#post-attendanceattendance-id)
 
+## Beacon API
+- [Register a new beacon](#post-beacon)
+- [Take attendance by beacon](#post-beacontake-attendance)
+
 ## API Details
 ###POST ```student/login```
 ```
@@ -537,34 +541,41 @@ Authorization: 'Bearer <token>'
 ```
 [
     {
-        "id": 1210,
-        "student_id": "2",
-        "lesson_id": 17,
-        "lecturer_id": "9580",
-        "recorded_date": "2016-10-12",
-        "recorded_time": null,
-        "is_absent": null,
-        "is_late": null,
-        "late_min": 0,
-        "created_at": "0000-00-00 00:00:00",
-        "updated_at": null,
-        "lesson": {
-            "id": 17,
-            "semester": "2",
-            "module_id": "007777",
-            "subject_area": "AE",
-            "catalog_number": "2FAT",
-            "class_section": "LM12",
-            "component": "LEC",
-            "facility": "08-04-0001",
-            "venue_id": 3,
-            "weekday": "WED",
-            "start_time": "09:00",
-            "end_time": "10:00",
-            "meeting_pattern": "",
-            "created_at": "0000-00-00 00:00:00",
-            "updated_at": "2016-04-26 11:09:19"
-        }
+      "id": 2313,
+      "student_id": "2",
+      "lesson_id": 24,
+      "lecturer_id": "1",
+      "recorded_date": "2016-10-24",
+      "recorded_time": null,
+      "is_absent": null,
+      "is_late": null,
+      "late_min": 0,
+      "created_at": "0000-00-00 00:00:00",
+      "updated_at": null,
+      "lesson": {
+          "id": 24,
+          "semester": "2",
+          "module_id": "010449",
+          "subject_area": "IS IE",
+          "catalog_number": "8INNOVA",
+          "class_section": "T05",
+          "component": "TUT",
+          "facility": "72-03-0015",
+          "venue_id": 2,
+          "weekday": "MON",
+          "start_time": "13:00",
+          "end_time": "15:00",
+          "meeting_pattern": "",
+          "created_at": "0000-00-00 00:00:00",
+          "updated_at": "2016-04-26 11:09:19"
+      },
+      "venue": {
+          "id": 2,
+          "location": "Room 06 - 02, Block 7",
+          "name": "IoT Room",
+          "created_at": null,
+          "updated_at": "2016-10-24 13:23:13"
+      }
     }
 ]
 ```
@@ -585,34 +596,41 @@ Authorization: 'Bearer <token>'
 ```
 [
     {
-        "id": 804,
-        "student_id": "2",
-        "lesson_id": 28,
-        "lecturer_id": "9580",
-        "recorded_date": "2016-10-10",
-        "recorded_time": null,
-        "is_absent": null,
-        "is_late": null,
-        "late_min": 0,
-        "created_at": "0000-00-00 00:00:00",
-        "updated_at": null,
-        "lesson": {
-            "id": 28,
-            "semester": "2",
-            "module_id": "009521",
-            "subject_area": "IS PDA",
-            "catalog_number": "7COMISS",
-            "class_section": "T03",
-            "component": "TUT",
-            "facility": "05-04-0009",
-            "venue_id": 2,
-            "weekday": "MON",
-            "start_time": "08:00",
-            "end_time": "12:00",
-            "meeting_pattern": "",
-            "created_at": "0000-00-00 00:00:00",
-            "updated_at": "2016-04-26 11:09:19"
-        }
+      "id": 2313,
+      "student_id": "2",
+      "lesson_id": 24,
+      "lecturer_id": "1",
+      "recorded_date": "2016-10-24",
+      "recorded_time": null,
+      "is_absent": null,
+      "is_late": null,
+      "late_min": 0,
+      "created_at": "0000-00-00 00:00:00",
+      "updated_at": null,
+      "lesson": {
+          "id": 24,
+          "semester": "2",
+          "module_id": "010449",
+          "subject_area": "IS IE",
+          "catalog_number": "8INNOVA",
+          "class_section": "T05",
+          "component": "TUT",
+          "facility": "72-03-0015",
+          "venue_id": 2,
+          "weekday": "MON",
+          "start_time": "13:00",
+          "end_time": "15:00",
+          "meeting_pattern": "",
+          "created_at": "0000-00-00 00:00:00",
+          "updated_at": "2016-04-26 11:09:19"
+      },
+      "venue": {
+          "id": 2,
+          "location": "Room 06 - 02, Block 7",
+          "name": "IoT Room",
+          "created_at": null,
+          "updated_at": "2016-10-24 13:23:13"
+      }
     }
 ]
 ```
@@ -669,6 +687,13 @@ Authorization: 'Bearer <token>'
             "acad": "AE",
             "uuid": null,
             "user_id": 53
+        },
+        "venue": {
+            "id": 1,
+            "location": "Room 06 - 01, Block 7",
+            "name": "R&D Room",
+            "created_at": null,
+            "updated_at": "2016-10-24 13:27:58"
         }
     }
 ]
@@ -807,5 +832,59 @@ Authorization: 'Bearer <token>'
     "late_min": 70,
     "created_at": "0000-00-00 00:00:00",
     "updated_at": "2016-10-12 10:42:16"
+}
+```
+
+**************
+
+###POST ```beacon```
+```
+=> Register a new beacon information for an app to fake beacon and broadcast signal.
+```
+####Header:
+```
+Authorization: 'Bearer <token>'
+```
+####Request: None
+####Response:
+```
+{
+  "uuid": "8f981cb0-46ce-4297-9745-34d5e63c1693",
+  "major": 11220,
+  "minor": 59671,
+  "user_id": 60,
+  "lesson_id": 28,
+  "id": 32
+}
+
+```
+
+**************
+
+###POST ```beacon/take-attendance```
+```
+=> Take attendance for students by submitting scanned beacon. If attendance is recorded successfully, new beacon will be returned to student's app for broadcasting fake beacon signal.
+```
+####Header:
+```
+Authorization: 'Bearer <token>'
+```
+####Request:
+```
+{
+    "uuid":"8f981cb0-46ce-4297-9745-34d5e63c1693",
+    "major":"11220",
+    "minor":"59671"
+}
+```
+####Response:
+```
+{
+  "uuid": "8f981cb0-46ce-4297-9745-34d5e63c1693",
+  "major": 26123,
+  "minor": 55307,
+  "user_id": 57,
+  "lesson_id": 28,
+  "id": 33
 }
 ```

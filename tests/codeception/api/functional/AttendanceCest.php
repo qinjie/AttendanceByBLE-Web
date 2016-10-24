@@ -24,7 +24,7 @@ class AttendanceCest
     {
         $I->wantTo('get attendance history in whole semester');
         $I->sendGET('v1/attendance/history', [
-            'expand' => 'lesson'
+            'expand' => 'lesson,venue'
         ]);
         $I->seeResponseCodeIs(200);
         $userId = $I->grabFromDatabase('user', 'id', [
@@ -55,6 +55,10 @@ class AttendanceCest
                 'start_time' => 'string',
                 'end_time' => 'string',
                 'meeting_pattern' => 'string'
+            ],
+            'venue' => [
+                'location' => 'string',
+                'name' => 'string'
             ]
         ], '$[*]');
     }
@@ -64,7 +68,7 @@ class AttendanceCest
         $I->wantTo('get attendance history for a class in whole semester');
         $I->sendGET('v1/attendance/history', [
             'class_section' => 'T1M2',
-            'expand' => 'lesson'
+            'expand' => 'lesson,venue'
         ]);
         $I->seeResponseCodeIs(200);
         $userId = $I->grabFromDatabase('user', 'id', [
@@ -96,6 +100,10 @@ class AttendanceCest
                 'start_time' => 'string',
                 'end_time' => 'string',
                 'meeting_pattern' => 'string'
+            ],
+            'venue' => [
+                'location' => 'string',
+                'name' => 'string'
             ]
         ], '$[*]');
     }

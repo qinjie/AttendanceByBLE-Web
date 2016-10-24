@@ -152,6 +152,7 @@ class AttendanceController extends CustomActiveController
         $query->andWhere("[[recorded_date]]<='{$queryParams['fromDate']}'");
 
         $query->joinWith('lesson');
+        $query->joinWith('lesson.venue');
         $query->joinWith('student');
         if (isset($queryParams['class_section']))
             $query->andWhere(['lesson.class_section' => $queryParams['class_section']]);
@@ -183,6 +184,7 @@ class AttendanceController extends CustomActiveController
         $query->andWhere("[[recorded_date]]<='{$queryParams['toDate']}'");
 
         $query->joinWith('lesson');
+        $query->joinWith('lesson.venue');
         if (isset($queryParams['class_section']))
             $query->andWhere(['lesson.class_section' => $queryParams['class_section']]);
 

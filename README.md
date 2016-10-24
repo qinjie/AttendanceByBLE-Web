@@ -9,6 +9,7 @@
 ## Server Description
 * **Attendance Taking Server** uses [Yii2 framework](http://www.yiiframework.com/). It provides API services for Mobile Apps.
 * **API URL**: ```188.166.247.154/atk-ble/api/web/index.php/v1/```
+* **Backend URL**: ```188.166.247.154/atk-ble/backend/web/index.php/v1/```
 
 ## Resources
 * [API Reference](API.md)

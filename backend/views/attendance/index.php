@@ -14,30 +14,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?=
-        Excel::widget([
-            'models' => $dataProvider->getModels(),
-            'mode' => 'export',
-            // 'columns' => ['id', 'recorded_date', 'recorded_time'],
-            // 'headers' => [
-            //     'id' => 'Attendance ID',
-            //     'recorded_date' => 'Recorded date',
-            //     'recorded_time' => 'Recorded time'
-            // ]
-        ]);
-        ?>
-    </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             'recorded_date',
-            'lesson.class_section',
-            'lesson.component',
             'lesson.start_time',
             'lesson.end_time',
+            'lesson.class_section',
+            'lesson.component',
             'student.name',
             // 'id',
             // 'student_id',

@@ -73,13 +73,6 @@ class AttendanceController extends Controller
         ]);
     }
 
-    public function actionExport()
-    {
-        $allModels = Attendance::find()->where([
-            'lecturer_id' => Yii::$app->user->identity->lecturer->id
-        ]);
-    }
-
     /**
      * Lists all Attendance models.
      * @return mixed

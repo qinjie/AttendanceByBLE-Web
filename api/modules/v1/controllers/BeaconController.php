@@ -87,8 +87,8 @@ class BeaconController extends CustomActiveController
     }
 
     private function getCurrentLesson() {
-        // Will fake with lesson.id = 28
-        return Lesson::findOne(['id' => 28]);
+        // Fake with lesson.id = 28 for testing
+        // return Lesson::findOne(['id' => 28]);
         $user = Yii::$app->user->identity;
         $currentTime = date('H:i');
         $currentWeekday = Util::getWeekday(strtotime(date('Y-m-d')));

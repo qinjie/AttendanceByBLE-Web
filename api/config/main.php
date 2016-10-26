@@ -123,6 +123,16 @@ return [
                     'extraPatterns' => [
                         'POST take-attendance' => 'take-attendance'
                     ]
+                ],
+
+                # Lesson API
+                [
+                    'class' => RestUrlRule::className(),
+                    'pluralize' => false,
+                    'controller' => 'v1/lesson',
+                    'extraPatterns' => [
+                        'GET current-classes' => 'current-classes'
+                    ]
                 ]
             ],
         ],

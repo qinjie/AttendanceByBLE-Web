@@ -2,18 +2,29 @@
 
 namespace api\modules\v1\controllers;
 
-use Yii;
 use common\models\Lesson;
 use common\models\search\LessonSearch;
 use api\components\CustomActiveController;
+use common\models\User;
+use common\components\AccessRule;
+use common\components\Util;
+use api\models\FaceAttendanceForm;
+
+use Yii;
 use yii\web\NotFoundHttpException;
+use yii\web\BadRequestHttpException;
+use yii\web\UnauthorizedHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\auth\HttpBearerAuth;
+use yii\filters\AccessControl;
 
 /**
  * LessonController implements the CRUD actions for Lesson model.
  */
 class LessonController extends CustomActiveController
 {
+    const CURRENT_SEMESTER = 2;
+
     public $modelClass = 'common\models\Lesson';
 
     /**
@@ -32,9 +43,9 @@ class LessonController extends CustomActiveController
                 ],
                 'rules' => [
                     [
-                        'actions' => ['day', 'week'],
+                        'actions' => ['current-classes'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => [User::ROLE_STUDENT],
                     ],
                 ],
                 'denyCallback' => function ($rule, $action) {
@@ -42,6 +53,20 @@ class LessonController extends CustomActiveController
                 },
             ]
         ];
+    }
+
+    public function actionCurrentClasses()
+    {
+        $searchModel = new LessonSearch();
+        $dataProvider = $searchModel->search(null);
+        $query = $dataProvider->query;
+        $query->select('class_section')->distinct();
+        $query->joinWith('timetables');
+        $query->where([
+            'timetable.student_id' => Yii::$app->user->identity->student->id,
+            'semester' => self::CURRENT_SEMESTER
+        ]);
+        return $dataProvider;
     }
 
     /**

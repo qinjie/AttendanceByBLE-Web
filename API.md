@@ -32,6 +32,9 @@ Attendance Taking server provides the following list of API
 - [Register a new beacon](#post-beacon)
 - [Take attendance by beacon](#post-beacontake-attendance)
 
+## Lesson API
+- [Get all class sections of student in current semester]
+
 ## API Details
 ###POST ```student/login```
 ```
@@ -887,4 +890,27 @@ Authorization: 'Bearer <token>'
   "lesson_id": 28,
   "id": 33
 }
+```
+
+***
+
+###GET ```lesson/current-classes```
+```
+=> Get all class sections of a student in current semester
+```
+####Header:
+```
+Authorization: 'Bearer <token>'
+```
+####Request: None
+####Response:
+```
+[
+    {
+        "class_section": "LM12"
+    },
+    {
+        "class_section": "T1M2"
+    }
+]
 ```

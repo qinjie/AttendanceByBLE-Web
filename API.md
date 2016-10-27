@@ -33,7 +33,7 @@ Attendance Taking server provides the following list of API
 - [Take attendance by beacon](#post-beacontake-attendance)
 
 ## Lesson API
-- [Get all class sections of student in current semester]
+- [Get all class sections of student in current semester](#get-lessoncurrent-classes)
 
 ## API Details
 ###POST ```student/login```

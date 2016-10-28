@@ -49,7 +49,7 @@ class BeaconController extends CustomActiveController
                         'roles' => [User::ROLE_LECTURER],
                     ],
                     [
-                        'actions' => ['take-attendance'],
+                        'actions' => ['take-attendance', 'uuid'],
                         'allow' => true,
                         'roles' => [User::ROLE_STUDENT],
                     ]
@@ -88,7 +88,7 @@ class BeaconController extends CustomActiveController
 
     private function getCurrentLesson() {
         // Fake with lesson.id = 28 for testing
-        return Lesson::findOne(['id' => 28]);
+        // return Lesson::findOne(['id' => 28]);
         $user = Yii::$app->user->identity;
         $currentTime = date('H:i');
         $currentWeekday = Util::getWeekday(strtotime(date('Y-m-d')));
@@ -181,6 +181,14 @@ class BeaconController extends CustomActiveController
             }
         }
         throw new BadRequestHttpException('Cannot take attendance');
+    }
+
+    public function actionUuid() {
+        $lesson = $this->getCurrentLesson();
+        if (!$lesson) return null;
+        $beacon = Beacon::findOne(['lesson_id' => $lesson->id]);
+        if (!$beacon) return null;
+        return $beacon->toArray(['uuid']);
     }
 
     /**

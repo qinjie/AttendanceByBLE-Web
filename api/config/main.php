@@ -121,7 +121,8 @@ return [
                     'pluralize' => false,
                     'controller' => 'v1/beacon',
                     'extraPatterns' => [
-                        'POST take-attendance' => 'take-attendance'
+                        'POST take-attendance' => 'take-attendance',
+                        'GET uuid' => 'uuid'
                     ]
                 ],
 

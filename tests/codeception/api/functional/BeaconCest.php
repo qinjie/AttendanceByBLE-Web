@@ -37,6 +37,15 @@ class BeaconCest
         $this->currentLessonId = $response->lesson_id;
     }
 
+    public function getUUIDOfCurrentClass(FunctionalTester $I)
+    {
+        $this->accessToken = $I->loginStudent()->token;
+        $I->amBearerAuthenticated($this->accessToken);
+        $I->wantTo('get uuid for current class');
+        $I->sendGET('v1/beacon/uuid');
+        $I->seeResponseCodeIs(200);
+    }
+
     public function takeAttendance_FirstStudent(FunctionalTester $I)
     {
         $this->accessToken = $I->loginStudent()->token;

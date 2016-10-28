@@ -842,7 +842,7 @@ Authorization: 'Bearer <token>'
 
 ###POST ```beacon```
 ```
-=> Register a new beacon information for an app to fake beacon and broadcast signal.
+=> Register a new beacon information for lecturer app to fake beacon and broadcast signal.
 ```
 ####Header:
 ```

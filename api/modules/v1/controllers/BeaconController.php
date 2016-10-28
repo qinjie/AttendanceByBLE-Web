@@ -46,7 +46,7 @@ class BeaconController extends CustomActiveController
                     [
                         'actions' => ['create'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => [User::ROLE_LECTURER],
                     ],
                     [
                         'actions' => ['take-attendance'],

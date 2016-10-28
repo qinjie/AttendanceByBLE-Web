@@ -60,13 +60,47 @@ class LessonController extends CustomActiveController
         $searchModel = new LessonSearch();
         $dataProvider = $searchModel->search(null);
         $query = $dataProvider->query;
-        $query->select('class_section')->distinct();
-        $query->joinWith('timetables');
+        $query->joinWith([
+            'attendances' => function($query) {
+                $query->andWhere([
+                    'student_id' => Yii::$app->user->identity->student->id
+                ]);
+            }
+        ]);
+        $query->joinWith('attendances');
         $query->where([
-            'timetable.student_id' => Yii::$app->user->identity->student->id,
+            'attendance.student_id' => Yii::$app->user->identity->student->id,
             'semester' => self::CURRENT_SEMESTER
         ]);
-        return $dataProvider;
+        $query->orderBy([
+            'class_section' => SORT_ASC
+        ]);
+
+        $listModels = $dataProvider->getModels();
+        $result = [];
+        $count = 0;
+        for ($iter = 0; $iter < count($listModels); ++$iter) {
+            $listModels[$iter] = $listModels[$iter]->toArray([], ['attendances']);
+            if (count($result) == 0) {
+                $result[] = $listModels[$iter];
+                $count += 1;
+            } else if ($result[$count - 1]['class_section'] == $listModels[$iter]['class_section']) {
+                $result[$count - 1]['attendances'] = array_merge(
+                    $result[$count - 1]['attendances'],
+                    $listModels[$iter]['attendances']
+                );
+            } else {
+                $result[] = $listModels[$iter];
+                $count += 1;
+            }
+        }
+        $sortFn = function($v1, $v2) {
+            return strcmp($v1['recorded_date'], $v2['recorded_date']);
+        };
+        for ($iter = 0; $iter < $count; ++$iter) {
+            usort($result[$iter]['attendances'], $sortFn);
+        }
+        return $result;
     }
 
     /**

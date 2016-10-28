@@ -47,6 +47,7 @@ class LessonSearch extends Lesson
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => false
         ]);
 
         $this->load($params, Yii::$app->id=='app-api' ? '' : null);

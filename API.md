@@ -33,7 +33,7 @@ Attendance Taking server provides the following list of API
 - [Take attendance by beacon](#post-beacontake-attendance)
 
 ## Lesson API
-- [Get all class sections of student in current semester](#get-lessoncurrent-classes)
+- [Get all class sections and attendances of student in current semester](#get-lessoncurrent-classes)
 
 ## API Details
 ###POST ```student/login```
@@ -896,7 +896,7 @@ Authorization: 'Bearer <token>'
 
 ###GET ```lesson/current-classes```
 ```
-=> Get all class sections of a student in current semester
+=> Get all class sections of a student in current semester. Each class section has list of all attendances in semester, sorted by recorded_date.
 ```
 ####Header:
 ```
@@ -906,11 +906,51 @@ Authorization: 'Bearer <token>'
 ####Response:
 ```
 [
-    {
-        "class_section": "LM12"
-    },
-    {
-        "class_section": "T1M2"
-    }
+  {
+    "id": 18,
+    "semester": "2",
+    "module_id": "007777",
+    "subject_area": "AE",
+    "catalog_number": "2FAT",
+    "class_section": "T1M2",
+    "component": "TUT",
+    "facility": "04-02-0008",
+    "venue_id": 3,
+    "weekday": "TUES",
+    "start_time": "15:00",
+    "end_time": "17:00",
+    "meeting_pattern": "",
+    "created_at": "0000-00-00 00:00:00",
+    "updated_at": "2016-04-26 11:09:19",
+    "attendances": [
+        {
+            "id": 250,
+            "student_id": "2",
+            "lesson_id": 18,
+            "lecturer_id": "9580",
+            "recorded_date": "2016-10-04",
+            "recorded_time": null,
+            "is_absent": null,
+            "is_late": null,
+            "late_min": 0,
+            "created_at": "0000-00-00 00:00:00",
+            "updated_at": null
+        },
+        {
+            "id": 459,
+            "student_id": "2",
+            "lesson_id": 32,
+            "lecturer_id": "1",
+            "recorded_date": "2016-10-05",
+            "recorded_time": null,
+            "is_absent": null,
+            "is_late": null,
+            "late_min": 0,
+            "created_at": "0000-00-00 00:00:00",
+            "updated_at": null
+        }
+    ]
+  }
 ]
 ```
+

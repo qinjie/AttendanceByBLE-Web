@@ -65,13 +65,13 @@ Attendance Taking server provides the following list of API
 ```
 {
   code: (
-    0: CODE_INCORRECT_USERNAME,
-    1: CODE_INCORRECT_PASSWORD,
-    2: CODE_INCORRECT_DEVICE,
-    3: CODE_UNVERIFIED_EMAIL,
-    4: CODE_UNVERIFIED_DEVICE,
-    5: CODE_UNVERIFIED_EMAIL_DEVICE,
-    6: CODE_INVALID_ACCOUNT
+    10: CODE_INCORRECT_USERNAME,
+    11: CODE_INCORRECT_PASSWORD,
+    12: CODE_INCORRECT_DEVICE,
+    13: CODE_UNVERIFIED_EMAIL,
+    14: CODE_UNVERIFIED_DEVICE,
+    15: CODE_UNVERIFIED_EMAIL_DEVICE,
+    16: CODE_INVALID_ACCOUNT
   )
 }
 ```
@@ -105,13 +105,13 @@ Attendance Taking server provides the following list of API
 ```
 {
   code: (
-    0: CODE_INCORRECT_USERNAME,
-    1: CODE_INCORRECT_PASSWORD,
-    2: CODE_INCORRECT_DEVICE,
-    3: CODE_UNVERIFIED_EMAIL,
-    4: CODE_UNVERIFIED_DEVICE,
-    5: CODE_UNVERIFIED_EMAIL_DEVICE,
-    6: CODE_INVALID_ACCOUNT
+    10: CODE_INCORRECT_USERNAME,
+    11: CODE_INCORRECT_PASSWORD,
+    12: CODE_INCORRECT_DEVICE,
+    13: CODE_UNVERIFIED_EMAIL,
+    14: CODE_UNVERIFIED_DEVICE,
+    15: CODE_UNVERIFIED_EMAIL_DEVICE,
+    16: CODE_INVALID_ACCOUNT
   )
 }
 ```
@@ -187,10 +187,10 @@ Attendance Taking server provides the following list of API
 ```
 {
   code: (
-    0: CODE_INCORRECT_USERNAME,
-    1: CODE_INCORRECT_PASSWORD,
-    6: CODE_INVALID_ACCOUNT,
-    7: CODE_DUPLICATE_DEVICE
+    10: CODE_INCORRECT_USERNAME,
+    11: CODE_INCORRECT_PASSWORD,
+    16: CODE_INVALID_ACCOUNT,
+    17: CODE_DUPLICATE_DEVICE
   )
 }
 ```
@@ -333,8 +333,8 @@ Authorization: 'Bearer <token>'
 ```
 {
   code: (
-    1: CODE_INCORRECT_PASSWORD,
-    8: CODE_INVALID_PASSWORD
+    11: CODE_INCORRECT_PASSWORD,
+    18: CODE_INVALID_PASSWORD
   )
 }
 ```
@@ -772,6 +772,7 @@ Authorization: 'Bearer <token>'
 }
 ```
 ####Response:
+- Success: 200
 ```
 {
     "id": 1210,
@@ -785,6 +786,16 @@ Authorization: 'Bearer <token>'
     "late_min": 102,
     "created_at": "0000-00-00 00:00:00",
     "updated_at": null
+}
+```
+
+- Error: 400
+```
+{
+  code: (
+    30: CODE_INVALID_FACE
+    31: CODE_INVALID_ATTENDANCE
+  )
 }
 ```
 

@@ -10,4 +10,4 @@ password: abcd1234
 ```
 
 ## Database schema
-<img src="atk_ble-db.svg" alt="database schema" />
+<img src="http://imgh.us/atk_ble-db.svg" alt="database schema" />

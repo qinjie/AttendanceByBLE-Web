@@ -31,7 +31,7 @@ Attendance Taking server provides the following list of API
 ## Beacon API
 - [Register a new beacon](#post-beacon)
 - [Take attendance by beacon](#post-beacontake-attendance)
-- [Get UUID for current class]
+- [Get UUID for current class](#get-beaconuuid)
 
 ## Lesson API
 - [Get all class sections and attendances of student in current semester](#get-lessoncurrent-classes)

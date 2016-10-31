@@ -17,6 +17,11 @@
 * [Database Reference](DATABASE.md)
 * [Yii2 documentation](http://www.yiiframework.com/doc-2.0/guide-index.html)
 
+## Rules of Attendance System
+- Unique device for each student
+- Newly registered device will be activated only on next day
+- Student can only take attendance inside the classroom
+
 ## Set up server in Ubuntu
 Instructions for setting up server
 
@@ -40,4 +45,10 @@ Instructions for testing server code
 5. You can write tests in directory ```tests/codeception/api/functional```
 6. Run ```codecept run functional AttendanceCest``` to run test file ```AttendanceCest.php```
 
+## Server batch scripts:
+Server batch scripts are inside ```cronjobs``` folder.
+- ```db.py``` contains configuration for database
+- ```device_activation.py``` is run at the end of the day to activate all newly registered devices in that day.
+- ```loop_device_activation.sh``` is used for testing. It runs ```device_activation.py``` every 10 seconds.
+- ```past_attendance.py``` is used for testing. It generates all attendance records in previous days.
 

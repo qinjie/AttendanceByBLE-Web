@@ -51,14 +51,19 @@ class BeaconCest
         $this->accessToken = $I->loginStudent()->token;
         $I->amBearerAuthenticated($this->accessToken);
         $I->wantTo('take attendance by beacon for a class');
+
+        $lessonId = $this->currentLessonId;
+        // For testing, using fixed beacon
+        $lessonId = 1;
+
         $uuid = $I->grabFromDatabase('beacon', 'uuid', [
-            'lesson_id' => $this->currentLessonId
+            'lesson_id' => $lessonId
         ]);
         $major = $I->grabFromDatabase('beacon', 'major', [
-            'lesson_id' => $this->currentLessonId
+            'lesson_id' => $lessonId
         ]);
         $minor = $I->grabFromDatabase('beacon', 'minor', [
-            'lesson_id' => $this->currentLessonId
+            'lesson_id' => $lessonId
         ]);
         $I->sendPOST('v1/beacon/take-attendance', [
             'uuid' => $uuid,
@@ -86,16 +91,21 @@ class BeaconCest
             'username' => 'canhnht',
             'role' => User::ROLE_STUDENT
         ]);
+
+        $lessonId = $this->currentLessonId;
+        // For testing, using fixed beacon
+        $lessonId = 1;
+
         $uuid = $I->grabFromDatabase('beacon', 'uuid', [
-            'lesson_id' => $this->currentLessonId,
+            'lesson_id' => $lessonId,
             'user_id' => $userId
         ]);
         $major = $I->grabFromDatabase('beacon', 'major', [
-            'lesson_id' => $this->currentLessonId,
+            'lesson_id' => $lessonId,
             'user_id' => $userId
         ]);
         $minor = $I->grabFromDatabase('beacon', 'minor', [
-            'lesson_id' => $this->currentLessonId,
+            'lesson_id' => $lessonId,
             'user_id' => $userId
         ]);
         $I->sendPOST('v1/beacon/take-attendance', [

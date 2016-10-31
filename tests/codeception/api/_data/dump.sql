@@ -1892,7 +1892,10 @@ CREATE TABLE `beacon` (
 ) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
 
 /*Data for the table `beacon` */
-  
+
+INSERT INTO `beacon` (`id`, `uuid`, `major`, `minor`, `user_id`, `lesson_id`, `created_at`, `updated_at`) VALUES
+  (1, '23A01AF0-232A-4518-9C0E-323FB773F5EF', 21476, 40081, 60, 1, '2015-07-30 08:11:00', '2016-06-13 09:50:00');
+    
 /*Table structure for table `attendance` */
 
 DROP TABLE IF EXISTS `attendance`;

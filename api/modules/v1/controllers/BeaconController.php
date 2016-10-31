@@ -140,6 +140,9 @@ class BeaconController extends CustomActiveController
     }
 
     private function getAttendanceOfLesson($lessonId, $studentId) {
+        // For testing. Lecturer app cannot fake beacon yet
+        return Attendance::find()->one();
+
         return Attendance::findOne([
             'lesson_id' => $lessonId,
             'student_id' => $studentId,
@@ -184,6 +187,12 @@ class BeaconController extends CustomActiveController
     }
 
     public function actionUuid() {
+        // BEGIN (For testing)
+        return [
+            'uuid' => '23A01AF0-232A-4518-9C0E-323FB773F5EF'
+        ];
+        // END. Remove this block when lecturer app uses API to register beacon
+
         $lesson = $this->getCurrentLesson();
         if (!$lesson) return null;
         $beacon = Beacon::findOne(['lesson_id' => $lesson->id]);

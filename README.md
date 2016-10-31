@@ -36,7 +36,8 @@ Instructions for setting up server
 9. Change permissions of these folders to be writable. Run ```chmod -R 777 api/runtime api/web/assets backend/runtime backend/web/assets frontend/runtime frontend/web/assets console/runtime``` in repository directory.
 
 ## Testing
-Instructions for testing server code
+Instructions for testing server code.
+Database for testing is in ```tests/codeception/api/_data/dump.sql```
 
 1. Install [codeception](http://codeception.com/install)
 2. From repository directory, go to ```tests/codeception/api```
@@ -45,10 +46,9 @@ Instructions for testing server code
 5. You can write tests in directory ```tests/codeception/api/functional```
 6. Run ```codecept run functional AttendanceCest``` to run test file ```AttendanceCest.php```
 
-## Server batch scripts:
+## Server batch scripts
 Server batch scripts are inside ```cronjobs``` folder.
 - ```db.py``` contains configuration for database
 - ```device_activation.py``` is run at the end of the day to activate all newly registered devices in that day.
 - ```loop_device_activation.sh``` is used for testing. It runs ```device_activation.py``` every 10 seconds.
 - ```past_attendance.py``` is used for testing. It generates all attendance records in previous days.
-

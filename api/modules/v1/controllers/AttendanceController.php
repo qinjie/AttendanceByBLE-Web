@@ -124,6 +124,7 @@ class AttendanceController extends CustomActiveController
 
         $query->joinWith('lesson');
         $query->joinWith('lesson.venue');
+        $query->joinWith('lecturer');
 
         $meeting_pattern = Util::getMeetingPatternOfWeek($queryParams['weekNumber']);
         $query->andWhere(['or',

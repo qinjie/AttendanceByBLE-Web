@@ -32,7 +32,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'take-attendance'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -100,5 +100,11 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+    public function actionTakeAttendance()
+    {
+        $list = $_POST['checkbox'];
+        return json_encode($list);
     }
 }

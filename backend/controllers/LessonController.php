@@ -4,7 +4,7 @@ namespace backend\controllers;
 
 use Yii;
 use common\models\Lesson;
-use yii\data\ActiveDataProvider;
+use common\models\LessonSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -35,23 +35,11 @@ class LessonController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Lesson::find(),
-        ]);
-        $query = $dataProvider->query;
-        $query->joinWith('attendances');
-        $query->andWhere([
-            'attendance.recorded_date' => date('Y-m-d'),
-            'attendance.lecturer_id' => Yii::$app->user->identity->lecturer->id
-        ]);
-        $query->orderBy([
-            'start_time' => SORT_ASC
-        ]);
-        $query->joinWith('venue');
-        $dataProvider->pagination = false;
-        $dataProvider->sort = false;
+        $searchModel = new LessonSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }

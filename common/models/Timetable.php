@@ -8,14 +8,13 @@ use Yii;
  * This is the model class for table "timetable".
  *
  * @property integer $id
- * @property string $student_id
  * @property integer $lesson_id
- * @property string $lecturer_id
+ * @property integer $student_id
  * @property string $created_at
+ * @property string $updated_at
  *
  * @property Student $student
  * @property Lesson $lesson
- * @property Lecturer $lecturer
  */
 class Timetable extends \yii\db\ActiveRecord
 {
@@ -33,14 +32,11 @@ class Timetable extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['student_id', 'lesson_id', 'lecturer_id'], 'required'],
-            [['lesson_id'], 'integer'],
-            [['created_at'], 'safe'],
-            [['student_id', 'lecturer_id'], 'string', 'max' => 10],
-            [['student_id', 'lesson_id', 'lecturer_id'], 'unique', 'targetAttribute' => ['student_id', 'lesson_id', 'lecturer_id'], 'message' => 'The combination of Student ID, Lesson ID and Lecturer ID has already been taken.'],
+            [['lesson_id'], 'required'],
+            [['lesson_id', 'student_id'], 'integer'],
+            [['created_at', 'updated_at'], 'safe'],
             [['student_id'], 'exist', 'skipOnError' => true, 'targetClass' => Student::className(), 'targetAttribute' => ['student_id' => 'id']],
             [['lesson_id'], 'exist', 'skipOnError' => true, 'targetClass' => Lesson::className(), 'targetAttribute' => ['lesson_id' => 'id']],
-            [['lecturer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Lecturer::className(), 'targetAttribute' => ['lecturer_id' => 'id']],
         ];
     }
 
@@ -51,10 +47,10 @@ class Timetable extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'student_id' => 'Student ID',
             'lesson_id' => 'Lesson ID',
-            'lecturer_id' => 'Lecturer ID',
+            'student_id' => 'Student ID',
             'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 
@@ -74,11 +70,23 @@ class Timetable extends \yii\db\ActiveRecord
         return $this->hasOne(Lesson::className(), ['id' => 'lesson_id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLecturer()
-    {
-        return $this->hasOne(Lecturer::className(), ['id' => 'lecturer_id']);
+    public function getLessonDay(){
+        return $this->hasMany(LessonDate::className(), ['lesson_id' => 'id'])
+            ->viaTable('lesson', ['id' => 'lesson_id']);//->where(['<', 'ldate', '2016-09-26']);
+    }
+
+    public function getLessonThisWeek(){
+        return $this->hasMany(LessonDate::className(), ['lesson_id' => 'id'])
+            ->viaTable('lesson', ['id' => 'lesson_id'])->where(['>=', 'ldate', date('Y-m-d', strtotime('monday this week'))])->andWhere(['<=', 'ldate', date('Y-m-d', strtotime('sunday this week'))]);
+    }
+
+    public function getLessonToday(){
+        return $this->hasMany(LessonDate::className(), ['lesson_id' => 'id'])
+            ->viaTable('lesson', ['id' => 'lesson_id'])->where(['ldate' => date("Y-m-d")]);
+    }
+
+    public function getLecturers(){
+        return $this->hasMany(Lecturer::className(), ['id' => 'lecturer_id'])
+        ->viaTable('lesson_lecturer', ['lesson_id' => 'lesson_id']);
     }
 }

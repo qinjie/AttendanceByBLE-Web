@@ -2,16 +2,12 @@
 
 namespace backend\controllers;
 
-use common\components\AccessRule;
-use common\models\User;
-
 use Yii;
 use common\models\Timetable;
-use yii\data\ActiveDataProvider;
+use common\models\TimetableSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 
 /**
  * TimetableController implements the CRUD actions for Timetable model.
@@ -24,18 +20,6 @@ class TimetableController extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'ruleConfig' => [
-                    'class' => AccessRule::className(),
-                ],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => [User::ROLE_LECTURER]
-                    ]
-                ]
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -51,15 +35,11 @@ class TimetableController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Timetable::find(),
-        ]);
-        $query = $dataProvider->query;
-        $query->where([
-            'lecturer_id' => Yii::$app->user->identity->lecturer->id,
-        ]);
+        $searchModel = new TimetableSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }

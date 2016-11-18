@@ -12,13 +12,9 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'student_id')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'student_id')->textInput() ?>
 
-    <?= $form->field($model, 'lesson_id')->textInput() ?>
-
-    <?= $form->field($model, 'lecturer_id')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'recorded_date')->textInput() ?>
+    <?= $form->field($model, 'lesson_date_id')->textInput() ?>
 
     <?= $form->field($model, 'recorded_time')->textInput() ?>
 
@@ -27,6 +23,8 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'is_late')->textInput() ?>
 
     <?= $form->field($model, 'late_min')->textInput() ?>
+
+    <?= $form->field($model, 'lecturer_id')->textInput() ?>
 
     <?= $form->field($model, 'created_at')->textInput() ?>
 

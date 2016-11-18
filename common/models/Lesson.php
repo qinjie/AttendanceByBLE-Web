@@ -4,8 +4,6 @@ namespace common\models;
 
 use Yii;
 
-use common\components\Util;
-
 /**
  * This is the model class for table "lesson".
  *
@@ -25,8 +23,11 @@ use common\components\Util;
  * @property string $created_at
  * @property string $updated_at
  *
- * @property Attendance[] $attendances
+ * @property BeaconLesson $beaconLesson
  * @property Venue $venue
+ * @property LessonDate[] $lessonDates
+ * @property LessonLecturer[] $lessonLecturers
+ * @property Lecturer[] $lecturers
  * @property Timetable[] $timetables
  */
 class Lesson extends \yii\db\ActiveRecord
@@ -81,9 +82,9 @@ class Lesson extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAttendances()
+    public function getBeaconLesson()
     {
-        return $this->hasMany(Attendance::className(), ['lesson_id' => 'id']);
+        return $this->hasOne(BeaconLesson::className(), ['lesson_id' => 'id']);
     }
 
     /**
@@ -92,6 +93,30 @@ class Lesson extends \yii\db\ActiveRecord
     public function getVenue()
     {
         return $this->hasOne(Venue::className(), ['id' => 'venue_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLessonDates()
+    {
+        return $this->hasMany(LessonDate::className(), ['lesson_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLessonLecturers()
+    {
+        return $this->hasMany(LessonLecturer::className(), ['lesson_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLecturers()
+    {
+        return $this->hasMany(Lecturer::className(), ['id' => 'lecturer_id'])->viaTable('lesson_lecturer', ['lesson_id' => 'id']);
     }
 
     /**

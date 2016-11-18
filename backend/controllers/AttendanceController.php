@@ -2,18 +2,12 @@
 
 namespace backend\controllers;
 
-use common\components\AccessRule;
-use common\models\User;
-use common\models\search\AttendanceSearch;
-
 use Yii;
 use common\models\Attendance;
-use yii\data\ActiveDataProvider;
+use common\models\AttendanceSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
-use moonland\phpexcel\Excel;
 
 /**
  * AttendanceController implements the CRUD actions for Attendance model.
@@ -26,18 +20,6 @@ class AttendanceController extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'ruleConfig' => [
-                    'class' => AccessRule::className(),
-                ],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => [User::ROLE_LECTURER]
-                    ]
-                ]
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -47,61 +29,18 @@ class AttendanceController extends Controller
         ];
     }
 
-    public function actionDay()
-    {
-        $searchModel = new AttendanceSearch();
-        $queryParams = Yii::$app->request->queryParams;
-        if (!isset($queryParams['recorded_date']))
-            $queryParams['recorded_date'] = date('Y-m-d');
-        $dataProvider = $searchModel->search($queryParams);
-        $dataProvider->pagination = false;
-        $query = $dataProvider->query;
-        $query->andWhere(['recorded_date' => $queryParams['recorded_date']]);
-        if (Yii::$app->user->identity->isStudent()) {
-            $query->andWhere(['student_id' => Yii::$app->user->identity->student->id]);
-        } else if (Yii::$app->user->identity->isLecturer()) {
-            $query->andWhere(['lecturer_id' => Yii::$app->user->identity->lecturer->id]);
-        }
-        $query->joinWith('lesson');
-        $query->orderBy([
-            'lesson.start_time' => SORT_ASC,
-            'lesson.id' => SORT_ASC,
-        ]);
-        return $this->render('day', [
-            'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel
-        ]);
-    }
-
     /**
      * Lists all Attendance models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Attendance::find(),
-        ]);
-        $query = $dataProvider->query;
-        $query->where([
-            'lecturer_id' => Yii::$app->user->identity->lecturer->id
-        ]);
-        $query->joinWith('lesson', 'student');
-        $query->orderBy([
-            'recorded_date' => SORT_ASC,
-            'lesson.start_time' => SORT_ASC,
-            'lesson.id' => SORT_ASC,
-        ]);
-        $dataProvider->sort->attributes['lesson.class_section'] = [
-            'asc' => ['lesson.class_section' => SORT_ASC],
-            'desc' => ['lesson.class_section' => SORT_DESC]
-        ];
-        unset($dataProvider->sort->attributes['is_absent'],
-            $dataProvider->sort->attributes['is_late'],
-            $dataProvider->sort->attributes['late_min']);
+        $searchModel = new AttendanceSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 

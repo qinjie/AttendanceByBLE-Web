@@ -2,6 +2,7 @@
 
 namespace api\modules\v1\controllers;
 
+use common\models\BeaconUser;
 use common\models\User;
 use common\models\Lecturer;
 use common\models\Student;
@@ -30,7 +31,7 @@ use yii\filters\AccessControl;
  */
 class UserController extends CustomActiveController
 {
-    public $modelClass = 'common\models\User';
+    public $modelClass = 'api\common\models\User';
 
     # Include envelope
     public $serializer = [
@@ -141,6 +142,9 @@ class UserController extends CustomActiveController
             UserToken::deleteAll(['user_id' => $user->id, 'action' => TokenHelper::TOKEN_ACTION_ACCESS]);
             $userToken = TokenHelper::createUserToken($user->id);
             $lecturer['token'] = $userToken->token;
+            $beacon = BeaconUser::find()->where(['user_id' => $user->id])->one();
+            $lecturer['major'] = $beacon['major'];
+            $lecturer['minor'] = $beacon['minor'];
             return $lecturer;
         } else {
             if ($model->hasErrors('username'))
@@ -165,6 +169,9 @@ class UserController extends CustomActiveController
             UserToken::deleteAll(['user_id' => $user->id, 'action' => TokenHelper::TOKEN_ACTION_ACCESS]);
             $userToken = TokenHelper::createUserToken($user->id);
             $student['token'] = $userToken->token;
+            $beacon = BeaconUser::find()->where(['user_id' => $user->id])->one();
+            $student['major'] = $beacon['major'];
+            $student['minor'] = $beacon['minor'];
             return $student;
         } else {
             if ($model->hasErrors('username'))

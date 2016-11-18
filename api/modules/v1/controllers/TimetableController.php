@@ -1,124 +1,62 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: qj
+ * Date: 28/3/15
+ * Time: 23:28
+ */
 
 namespace api\modules\v1\controllers;
 
-use Yii;
-use common\models\Timetable;
-use common\models\search\TimetableSearch;
 use api\components\CustomActiveController;
-use yii\web\NotFoundHttpException;
+use common\components\AccessRule;
+use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
+use yii\filters\auth\HttpBearerAuth;
 use yii\filters\VerbFilter;
+use yii\web\UnauthorizedHttpException;
+use Yii;
 
-/**
- * TimetableController implements the CRUD actions for Timetable model.
- */
 class TimetableController extends CustomActiveController
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
+    public $modelClass = 'api\common\models\Timetable';
+
+    public function behaviors() {
+        $behaviors = parent::behaviors();
+
+        $behaviors['authenticator'] = [
+            'class' => HttpBearerAuth::className(),
+            'except' => [],
+        ];
+
+        $behaviors['access'] = [
+            'class' => AccessControl::className(),
+            'ruleConfig' => [
+                'class' => AccessRule::className(),
+            ],
+            'rules' => [
+                [
+                    'actions' => [],
+                    'allow' => true,
+                    'roles' => ['?'],
                 ],
+                [
+                    'actions' => [],
+                    'allow' => true,
+                    'roles' => ['@'],
+                ]
+            ],
+            'denyCallback' => function ($rule, $action) {
+                throw new UnauthorizedHttpException('You are not authorized');
+            },
+        ];
+
+        $behaviors['verbs'] = [
+            'class' => VerbFilter::className(),
+            'actions' => [
             ],
         ];
-    }
 
-    /**
-     * Lists all Timetable models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new TimetableSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Displays a single Timetable model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new Timetable model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Timetable();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Updates an existing Timetable model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Deletes an existing Timetable model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Timetable model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Timetable the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Timetable::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
+        return $behaviors;
     }
 }

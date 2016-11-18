@@ -68,7 +68,7 @@ return [
             'class' => UrlManager::className(),
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'enableStrictParsing' => true,
+//            'enableStrictParsing' => true,
             'rules' => [
                 # User API
                 'POST <version:\w+>/lecturer/login' => '<version>/user/login-lecturer',
@@ -92,49 +92,14 @@ return [
                         'POST train-face' => 'train-face'
                     ]
                 ],
-                [
-                    'class' => RestUrlRule::className(),
-                    'pluralize' => false,
-                    'controller' => ['v1/student', 'v1/lecturer'],
-                    'extraPatterns' => [
-                        'GET profile' => 'profile'
-                    ]
-                ],
 
-                # Timetable API
                 [
                     'class' => RestUrlRule::className(),
                     'pluralize' => false,
-                    'controller' => 'v1/attendance',
-                    'extraPatterns' => [
-                        'GET day' => 'day',
-                        'GET week' => 'week',
-                        'GET history' => 'history',
-                        'GET semester' => 'semester',
-                        'POST face' => 'face'
-                    ]
+                    'controller' => ['v1/timetable', 'v1/lesson', 'v1/student', 'v1/lesson'],
+                    'extraPatterns' => []
                 ],
-
-                # Beacon API
-                [
-                    'class' => RestUrlRule::className(),
-                    'pluralize' => false,
-                    'controller' => 'v1/beacon',
-                    'extraPatterns' => [
-                        'POST take-attendance' => 'take-attendance',
-                        'GET uuid' => 'uuid'
-                    ]
-                ],
-
-                # Lesson API
-                [
-                    'class' => RestUrlRule::className(),
-                    'pluralize' => false,
-                    'controller' => 'v1/lesson',
-                    'extraPatterns' => [
-                        'GET current-classes' => 'current-classes'
-                    ]
-                ]
+                ['class' => 'yii\rest\UrlRule', 'controller' => ['v1/beacon-lesson', 'v1/lecturer'], 'extraPatterns' => ['GET search' => 'search']],
             ],
         ],
     ],

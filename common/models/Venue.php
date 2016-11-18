@@ -10,11 +10,13 @@ use Yii;
  * @property integer $id
  * @property string $location
  * @property string $name
+ * @property string $uuid
+ * @property integer $major
+ * @property integer $minor
  * @property string $created_at
  * @property string $updated_at
  *
  * @property Lesson[] $lessons
- * @property VenueBeacon[] $venueBeacons
  */
 class Venue extends \yii\db\ActiveRecord
 {
@@ -33,8 +35,10 @@ class Venue extends \yii\db\ActiveRecord
     {
         return [
             [['location'], 'required'],
+            [['major', 'minor'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['location', 'name'], 'string', 'max' => 100],
+            [['uuid'], 'string', 'max' => 40],
         ];
     }
 
@@ -47,6 +51,9 @@ class Venue extends \yii\db\ActiveRecord
             'id' => 'ID',
             'location' => 'Location',
             'name' => 'Name',
+            'uuid' => 'Uuid',
+            'major' => 'Major',
+            'minor' => 'Minor',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

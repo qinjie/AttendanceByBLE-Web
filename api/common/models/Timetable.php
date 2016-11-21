@@ -7,7 +7,7 @@ class Timetable extends \common\models\Timetable
 {
     public function extraFields()
     {
-        $more = ['student', 'lesson', 'lessonDay', 'lessonThisWeek', 'lessonToday', 'lecturers', 'venue'];
+        $more = [];
         $fields = array_merge(parent::fields(), $more);
         return $fields;
     }

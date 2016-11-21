@@ -68,4 +68,36 @@ class TimetableSearch extends Timetable
 
         return $dataProvider;
     }
+
+    public function searchRest($params)
+    {
+        $student = Student::find()->where(['user_id' => Yii::$app->user->id])->one();
+        $query = Timetable::find()->where(['student_id' => $student['id']]);
+        $query->join('LEFT JOIN', 'lesson', 'lesson.id = timetable.lesson_id');
+        $query->join('LEFT JOIN', 'lesson_date', 'lesson.id = lesson_date.lesson_id')->orderBy('lesson_date.ldate, lesson.start_time ASC');
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'lesson_id' => $this->lesson_id,
+            'student_id' => $this->student_id,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ]);
+
+        return $dataProvider;
+    }
 }

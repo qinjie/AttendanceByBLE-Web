@@ -8,6 +8,7 @@
 
 namespace api\modules\v1\controllers;
 
+use api\common\models\Student;
 use api\components\CustomActiveController;
 use common\components\AccessRule;
 use yii\data\ActiveDataProvider;
@@ -58,5 +59,20 @@ class TimetableController extends CustomActiveController
         ];
 
         return $behaviors;
+    }
+
+
+    public function actions()
+    {
+        $actions = parent::actions();
+        $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
+        return $actions;
+    }
+
+    public function prepareDataProvider()
+    {
+        $searchModel = new \common\models\TimetableSearch();
+        $dataProvider = $searchModel->searchRest(Yii::$app->request->queryParams);
+        return $dataProvider;
     }
 }

@@ -77,7 +77,7 @@ class Timetable extends \yii\db\ActiveRecord
 
     public function getLessonThisWeek(){
         return $this->hasOne(LessonDate::className(), ['lesson_id' => 'id'])
-            ->viaTable('lesson', ['id' => 'lesson_id'])->where(['>=', 'ldate', date('Y-m-d', strtotime('monday this week'))])->andWhere(['<=', 'ldate', date('Y-m-d', strtotime('sunday this week'))]);
+            ->viaTable('lesson', ['id' => 'lesson_id'])->where(['>=', 'ldate', date('Y-m-d', strtotime('monday this week'))]);
     }
 
     public function getLessonToday(){
@@ -93,5 +93,20 @@ class Timetable extends \yii\db\ActiveRecord
     public function getVenue(){
         return $this->hasOne(Venue::className(), ['id' => 'venue_id'])
             ->viaTable('lesson', ['id' => 'lesson_id']);
+    }
+
+    public function getLesson_date(){
+        return $this->hasOne(LessonDate::className(), ['lesson_id' => 'id'])
+            ->viaTable('lesson', ['id' => 'lesson_id'])->where(['>=', 'ldate', date('Y-m-d', strtotime('monday this week'))])->andWhere(['<=', 'ldate', date('Y-m-d', strtotime('sunday this week'))]);
+    }
+
+    public function fields()
+    {
+        $fields = parent::fields();
+        $fields[] = 'lesson';
+        $fields[] = 'lesson_date';
+        $fields[] = 'venue';
+        $fields[] = 'lecturers';
+        return $fields;
     }
 }

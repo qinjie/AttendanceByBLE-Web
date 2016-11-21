@@ -86,7 +86,7 @@ class Timetable extends \yii\db\ActiveRecord
     }
 
     public function getLecturers(){
-        return $this->hasMany(Lecturer::className(), ['id' => 'lecturer_id'])
+        return $this->hasOne(Lecturer::className(), ['id' => 'lecturer_id'])
         ->viaTable('lesson_lecturer', ['lesson_id' => 'lesson_id']);
     }
 

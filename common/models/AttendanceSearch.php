@@ -42,7 +42,7 @@ class AttendanceSearch extends Attendance
     public function search($params)
     {
         $student_id = Student::find()->select('id')->where(['user_id' => Yii::$app->user->id]);
-        $query = Attendance::find()->where(['student_id' => 1]);
+        $query = Attendance::find()->where(['student_id' => $student_id]);
 
         // add conditions that should always apply here
 

@@ -76,7 +76,7 @@ class AttendanceController extends CustomActiveController
         $query = $dataProvider->query;
         $query->joinWith('lecturer');
         $query->joinWith('lessonDate');
-        $query->joinWith('lesson');
+        $query->joinWith('lessonDate.lesson');
         return $dataProvider;
     }
 }

@@ -76,12 +76,12 @@ class Timetable extends \yii\db\ActiveRecord
     }
 
     public function getLessonThisWeek(){
-        return $this->hasMany(LessonDate::className(), ['lesson_id' => 'id'])
+        return $this->hasOne(LessonDate::className(), ['lesson_id' => 'id'])
             ->viaTable('lesson', ['id' => 'lesson_id'])->where(['>=', 'ldate', date('Y-m-d', strtotime('monday this week'))])->andWhere(['<=', 'ldate', date('Y-m-d', strtotime('sunday this week'))]);
     }
 
     public function getLessonToday(){
-        return $this->hasMany(LessonDate::className(), ['lesson_id' => 'id'])
+        return $this->hasOne(LessonDate::className(), ['lesson_id' => 'id'])
             ->viaTable('lesson', ['id' => 'lesson_id'])->where(['ldate' => date("Y-m-d")]);
     }
 

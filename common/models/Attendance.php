@@ -92,8 +92,23 @@ class Attendance extends \yii\db\ActiveRecord
         return $this->hasOne(LessonDate::className(), ['id' => 'lesson_date_id']);
     }
 
-    public function getLesson()
+    public function extraFields()
     {
-        return $this->hasMany(Lesson::className(), ['id' => 'lesson_id'])->viaTable('lesson_date', ['id' => 'lesson_date_id']);
+        $extraFields = parent::extraFields();
+        $extraFields['lesson'] = function($model) {
+            return $model->lessonDate->lesson;
+        };
+        return $extraFields;
+    }
+
+    public function fields()
+    {
+        $fields=parent::fields();
+        unset($fields['lecturer_id']);
+        unset($fields['student_id']);
+        unset($fields['lesson_date_id']);
+        unset($fields['created_at']);
+        unset($fields['updated_at']);
+        return $fields;
     }
 }

@@ -107,6 +107,10 @@ class Timetable extends \yii\db\ActiveRecord
         $fields[] = 'lesson_date';
         $fields[] = 'venue';
         $fields[] = 'lecturers';
+        unset($fields['created_at']);
+        unset($fields['updated_at']);
+        unset($fields['lesson_id']);
+        unset($fields['student_id']);
         return $fields;
     }
 }

@@ -15,26 +15,35 @@
             <td>Name</td>
             <td>Status</td>
         </thead>
-        <tr>
-            <td>1</td>
-            <td>Tran Hoang Nam</td>
-            <td><input name="checkbox[]" type="checkbox" value="1"></td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Bui Hoang Hiep</td>
-            <td><input name="checkbox[]" type="checkbox" value="2"></td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>Martin The Old Man</td>
-            <td><input name="checkbox[]" type="checkbox" value="3"></td>
-        </tr>
-        <tr>
-            <td>4</td>
-            <td>Nguyen Huu Thanh Canh</td>
-            <td><input name="checkbox[]" type="checkbox" value="4"></td>
-        </tr>
+        <?php
+        $cmd = Yii::$app->db
+            ->createCommand("select student_id, lesson_date.id, lesson_lecturer.lecturer_id from timetable LEFT JOIN lesson_date on timetable.lesson_id = lesson_date.lesson_id
+            LEFT JOIN lesson on timetable.lesson_id = lesson.id
+            LEFT JOIN lesson_lecturer ON timetable.lesson_id = lesson_lecturer.lesson_id
+            where start_time <= '".date('H:i:s')."' and end_time >= '".date('H:i:s')."'
+            and ldate = '".date('Y-m-d')."' and lesson_lecturer.lecturer_id = (select id from lecturer where user_id = ".Yii::$app->user->id.")");
+        $result = $cmd->queryAll();
+        $count = 0;
+        if (count($result) > 0){
+            echo "<input type='text' name='lesson_date_id' value='".$result[0]['id']."' hidden>";
+            echo "<input type='text' name='lecturer_id' value='".$result[0]['lecturer_id']."' hidden>";
+        }
+        foreach ($result as $td){
+            $count++;
+            $id = $td['student_id'];
+            $cmd = Yii::$app->db
+                ->createCommand("select name from student where id = ".$id);
+            $rs = $cmd->queryAll();
+            $name = $rs[0]['name'];
+            echo "
+            <tr>
+            <td>".$count."</td>
+            <td>".$name."</td>
+            <td><input name=\"checkbox[]\" type=\"checkbox\" value=\"".$id."\"></td>
+            </tr>
+            ";
+        }
+        ?>
         <tfoot>
             <td></td>
             <td>Total</td>
@@ -230,11 +239,17 @@ $this->registerJs($script);
 //    $cmd = Yii::$app->db
 //        ->createCommand("select id from lesson");
 //    $result = $cmd->queryAll();
+//    $count = 0;
 //    foreach ($result as $td){
+//        $count++;
 //        $id = $td['id'];
 //        $cmd = Yii::$app->db
-//            ->createCommand("insert into lesson_lecturer(lesson_id, lecturer_id) values (:id, 1)");
+//            ->createCommand("select id from lecturer");
+//        $rs = $cmd->queryAll();
+//        $cmd = Yii::$app->db
+//            ->createCommand("insert into lesson_lecturer(lesson_id, lecturer_id) values (:id, :lecturer_id)");
 //        $cmd->bindValue(':id', $id);
-//        $result = $cmd->query();
+//        $cmd->bindValue(':lecturer_id', $rs[$count%count($rs)]['id']);
+//        $rs2 = $cmd->query();
 //    }
 ?>

@@ -18,7 +18,7 @@ class AttendanceSearch extends Attendance
     public function rules()
     {
         return [
-            [['id', 'student_id', 'lesson_date_id', 'is_absent', 'is_late', 'late_min', 'lecturer_id'], 'integer'],
+            [['id', 'student_id', 'lesson_date_id', 'status', 'lecturer_id'], 'integer'],
             [['recorded_time', 'created_at', 'updated_at'], 'safe'],
         ];
     }
@@ -41,7 +41,8 @@ class AttendanceSearch extends Attendance
      */
     public function search($params)
     {
-        $query = Attendance::find();
+        $student_id = Student::find()->select('id')->where(['user_id' => Yii::$app->user->id]);
+        $query = Attendance::find()->where(['student_id' => 1]);
 
         // add conditions that should always apply here
 
@@ -63,9 +64,7 @@ class AttendanceSearch extends Attendance
             'student_id' => $this->student_id,
             'lesson_date_id' => $this->lesson_date_id,
             'recorded_time' => $this->recorded_time,
-            'is_absent' => $this->is_absent,
-            'is_late' => $this->is_late,
-            'late_min' => $this->late_min,
+            'late_min' => $this->status,
             'lecturer_id' => $this->lecturer_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

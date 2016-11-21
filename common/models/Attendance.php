@@ -11,9 +11,7 @@ use Yii;
  * @property integer $student_id
  * @property integer $lesson_date_id
  * @property string $recorded_time
- * @property integer $is_absent
- * @property integer $is_late
- * @property integer $late_min
+ * @property integer $status
  * @property integer $lecturer_id
  * @property string $created_at
  * @property string $updated_at
@@ -32,6 +30,11 @@ class Attendance extends \yii\db\ActiveRecord
         return 'attendance';
     }
 
+    public function formName()
+    {
+        return '';
+    }
+
     /**
      * @inheritdoc
      */
@@ -39,7 +42,7 @@ class Attendance extends \yii\db\ActiveRecord
     {
         return [
             [['student_id', 'lesson_date_id'], 'required'],
-            [['student_id', 'lesson_date_id', 'is_absent', 'is_late', 'late_min', 'lecturer_id'], 'integer'],
+            [['student_id', 'lesson_date_id', 'status', 'lecturer_id'], 'integer'],
             [['recorded_time', 'created_at', 'updated_at'], 'safe'],
             [['student_id', 'lesson_date_id'], 'unique', 'targetAttribute' => ['student_id', 'lesson_date_id'], 'message' => 'The combination of Student ID and Lesson Date ID has already been taken.'],
             [['student_id'], 'exist', 'skipOnError' => true, 'targetClass' => Student::className(), 'targetAttribute' => ['student_id' => 'id']],
@@ -58,9 +61,7 @@ class Attendance extends \yii\db\ActiveRecord
             'student_id' => 'Student ID',
             'lesson_date_id' => 'Lesson Date ID',
             'recorded_time' => 'Recorded Time',
-            'is_absent' => 'Is Absent',
-            'is_late' => 'Is Late',
-            'late_min' => 'Late Min',
+            'status' => 'Status',
             'lecturer_id' => 'Lecturer ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -89,5 +90,10 @@ class Attendance extends \yii\db\ActiveRecord
     public function getLessonDate()
     {
         return $this->hasOne(LessonDate::className(), ['id' => 'lesson_date_id']);
+    }
+
+    public function getLesson()
+    {
+        return $this->hasMany(Lesson::className(), ['id' => 'lesson_id'])->viaTable('lesson_date', ['id' => 'lesson_date_id']);
     }
 }

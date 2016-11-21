@@ -3,11 +3,11 @@ namespace api\common\models;
 
 use Yii;
 
-class Timetable extends \common\models\Timetable
+class LessonDate extends \common\models\LessonDate
 {
     public function extraFields()
     {
-        $more = ['student', 'lesson', 'lessonDay', 'lessonThisWeek', 'lessonToday', 'lecturers', 'venue'];
+        $more = [];
         $fields = array_merge(parent::fields(), $more);
         return $fields;
     }

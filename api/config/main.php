@@ -96,10 +96,10 @@ return [
                 [
                     'class' => RestUrlRule::className(),
                     'pluralize' => false,
-                    'controller' => ['v1/timetable', 'v1/lesson', 'v1/student', 'v1/lesson'],
+                    'controller' => ['v1/timetable', 'v1/lesson', 'v1/student', 'v1/lesson', 'v1/beacon-lesson', 'v1/lecturer'],
                     'extraPatterns' => []
                 ],
-                ['class' => 'yii\rest\UrlRule', 'controller' => ['v1/beacon-lesson', 'v1/lecturer'], 'extraPatterns' => ['GET search' => 'search']],
+                ['class' => 'yii\rest\UrlRule', 'controller' => ['v1/attendance'], 'extraPatterns' => ['GET search' => 'search']],
             ],
         ],
     ],

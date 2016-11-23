@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\components\Util;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -78,7 +79,8 @@ class TimetableSearch extends Timetable
         $query = Timetable::find()->where(['student_id' => $student['id']]);
         $query->join('LEFT JOIN', 'lesson', 'lesson.id = timetable.lesson_id');
         $query->join('LEFT JOIN', 'lesson_date', 'lesson.id = lesson_date.lesson_id')->orderBy('lesson_date.ldate, lesson.start_time ASC');
-        $query->where(['>=', 'ldate', date('Y-m-d', strtotime('monday this week'))])->andWhere(['<=', 'ldate', date('Y-m-d', strtotime('sunday this week'))]);
+        $query->where(['lesson.semester' => Util::getCurrentSemester()]);
+        $query->andWhere(['>=', 'ldate', date('Y-m-d', strtotime('monday this week'))])->andWhere(['<=', 'ldate', date('Y-m-d', strtotime('sunday this week'))]);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([

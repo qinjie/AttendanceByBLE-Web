@@ -4,7 +4,7 @@ namespace common\components;
 
 use common\models\search\LessonSearch;
 use common\models\Attendance;
-use common\models\Student;
+use common\models\SemesterInfo;
 use Yii;
 
 class Util
@@ -128,4 +128,13 @@ class Util
         }
         return NULL;
     }
+
+    public static function getCurrentSemester(){
+        $semester = SemesterInfo::find()->where('start_date <= \''.date('Y-m-d').'\' and end_date >= \''.date('Y-m-d').'\'')->one();
+        if ($semester){
+            return $semester['id'];
+        }
+        return NULL;
+    }
+
 }

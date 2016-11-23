@@ -9,14 +9,12 @@ echo "<input id='homeUrl' value='".Yii::$app->homeUrl."' hidden>";
             <h1 style="margin: 0px 0px 0px 0px;">Current Attendace </h1>
         </div>
     </div>
-    <?php \yii\widgets\Pjax::begin(['id' => 'count']);?>
     <form id="idForm">
         <table class="record_table">
             <thead>
             <td>#</td>
             <td>Name</td>
             <td>Status</td>
-            <td>Server</td>
             </thead>
             <?php
             $count = 0;
@@ -34,18 +32,6 @@ echo "<input id='homeUrl' value='".Yii::$app->homeUrl."' hidden>";
                 <td>".$count."</td>
                 <td>".$student_list_name[$i]."</td>
                 <td><input name=\"checkbox[]\" type=\"checkbox\" value=\"".$student_list_id[$i]."\"></td>
-                ";
-                if (in_array($student_list_id[$i], $attended_student)){
-                echo "
-                <td><input name=\"checkboxx\" type=\"checkbox\" value=\"".$student_list_id[$i]."\" checked></td>
-                ";
-                }
-                else{
-                echo "
-                <td><input name=\"checkboxx\" type=\"checkbox\" value=\"".$student_list_id[$i]."\"></td>
-                ";
-                }
-                echo "      
                 </tr>
                 ";
             }
@@ -54,52 +40,43 @@ echo "<input id='homeUrl' value='".Yii::$app->homeUrl."' hidden>";
             <td></td>
             <td>Total</td>
             <td><p id="total">0</p></td>
-            <td></td>
             </tfoot>
         </table>
+        <?php \yii\widgets\Pjax::begin(['id' => 'count']); ?>
+        <table class="status_table" style="width: 10%">
+            <thead>
+                <td></td>
+            </thead>
+            <?php
+            for ($i = 0; $i < count($student_list_id); $i++) {
+                if (in_array($student_list_id[$i], $attended_student)){
+                echo "
+                <tr><td><img src='tick.png' width='20px' height='20px'></td></tr>
+                ";
+                }
+                else{
+                    echo "
+                    <tr><td></td></tr>
+                    ";
+                }
+            }
+            ?>
+            <tfoot>
+                <td></td>
+            </tfoot>
+        </table>
+        <?php
+            \yii\widgets\Pjax::end();
+        ?>
         <div class="custom-submit">
             <input type="submit" class="btn btn-success">
         </div>
     </form>
 
-    <?php
-$script = <<< JS
-    document.getElementById('total').innerHTML = document.querySelectorAll('input[type="checkbox"]:checked').length
-    
-    $(document).ready(function() {
-        $('.record_table tr').click(function(event) {
-            if (event.target.type !== 'checkbox') {
-                $(':checkbox', this).trigger('click');
-                document.getElementById('total').innerHTML = document.querySelectorAll('input[type="checkbox"]:checked').length
-            }
-        });
-    });
-    
-    $("#idForm").submit(function(e) {
-        
-        var homeUrl = document.getElementById("homeUrl").value;
-        var url = homeUrl + "/site/take-attendance"; // the script where you handle the form input.
-        $.ajax({
-               type: "POST",
-               url: url,
-               data: $("#idForm").serialize(), // serializes the form's elements.
-               success: function(data)
-               {
-                   alert(data); // show response from the php script.
-               }
-             });
-    
-        e.preventDefault(); // avoid to execute the actual submit of the form.
-    });
-JS;
-    $this->registerJs($script);
-    \yii\widgets\Pjax::end();
-    ?>
-
     <style>
         .custom-submit {
             margin-top: 20px;
-            padding-right: 20px;
+            padding-right: 10%;
             float: right;
         }
 
@@ -122,8 +99,9 @@ JS;
         }
 
         .record_table {
-            width: 100%;
             border-collapse: collapse;
+            width: 90%;
+            float: left;
         }
 
         .record_table tr {
@@ -137,6 +115,17 @@ JS;
         .record_table td {
             border: 1px solid #eee;
         }
+
+        .status_table {
+            width: 10%;
+            border-collapse: collapse;
+        }
+        .status_table tr {
+            height: 50px;
+        }
+        .status_table td:first-child {
+            padding-left: 10px;
+        }
     </style>
 
 <?php
@@ -148,9 +137,42 @@ $(document).ready(function() {
            $.pjax.reload({container:"#count", async:false});
        }
    })
-   }, 10000);
+   }, 3000);
 });
 
+JS;
+$this->registerJs($script);
+?>
+
+<?php
+$script = <<< JS
+                    document.getElementById('total').innerHTML = document.querySelectorAll('input[type="checkbox"]:checked').length
+                    
+                    $(document).ready(function() {
+                        $('.record_table tr').click(function(event) {
+                            if (event.target.type !== 'checkbox') {
+                                $(':checkbox', this).trigger('click');
+                                document.getElementById('total').innerHTML = document.querySelectorAll('input[type="checkbox"]:checked').length
+                            }
+                        });
+                    });
+                    
+                    $("#idForm").submit(function(e) {
+                        
+                        var homeUrl = document.getElementById("homeUrl").value;
+                        var url = homeUrl + "/site/take-attendance"; // the script where you handle the form input.
+                        $.ajax({
+                               type: "POST",
+                               url: url,
+                               data: $("#idForm").serialize(), // serializes the form's elements.
+                               success: function(data)
+                               {
+                                   alert(data); // show response from the php script.
+                               }
+                             });
+                    
+                        e.preventDefault(); // avoid to execute the actual submit of the form.
+                    });
 JS;
 $this->registerJs($script);
 ?>

@@ -78,14 +78,17 @@ class TimetableSearch extends Timetable
         $student = Student::find()->where(['user_id' => Yii::$app->user->id])->one();
         $query = Timetable::find()->where(['student_id' => $student['id']]);
         $query->join('LEFT JOIN', 'lesson', 'lesson.id = timetable.lesson_id');
-        $query->join('LEFT JOIN', 'lesson_date', 'lesson.id = lesson_date.lesson_id')->orderBy('lesson_date.ldate, lesson.start_time ASC');
-        $query->where(['lesson.semester' => Util::getCurrentSemester()]);
-        $query->andWhere(['>=', 'ldate', date('Y-m-d', strtotime('monday this week'))])->andWhere(['<=', 'ldate', date('Y-m-d', strtotime('sunday this week'))]);
+        $query->join('LEFT JOIN', 'lesson_date', 'lesson.id = lesson_date.lesson_id');
+        $query->andWhere(['lesson.semester' => Util::getCurrentSemester()]);
+        $query->andWhere(['>=', 'lesson_date.ldate', date('Y-m-d', strtotime('monday this week'))])->andWhere(['<=', 'lesson_date.ldate', date('Y-m-d', strtotime('sunday this week'))]);
+        $query->orderBy('lesson_date.ldate, lesson.start_time ASC');
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+        $dataProvider->pagination = false;
 
         $this->load($params);
 

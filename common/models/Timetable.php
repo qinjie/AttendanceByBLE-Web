@@ -87,19 +87,27 @@ class Timetable extends \yii\db\ActiveRecord
 
     public function getLesson_date(){
         return $this->hasOne(LessonDate::className(), ['lesson_id' => 'id'])
-            ->viaTable('lesson', ['id' => 'lesson_id']);
+            ->viaTable('lesson', ['id' => 'lesson_id'])->andWhere(['>=', 'lesson_date.ldate', date('Y-m-d', strtotime('monday this week'))])->andWhere(['<=', 'lesson_date.ldate', date('Y-m-d', strtotime('sunday this week'))]);;
     }
 
     public function fields()
     {
         $fields = parent::fields();
+        $fields[] = 'lesson';
+        $fields[] = 'lesson_date';
+        $fields[] = 'venue';
+        $fields[] = 'lecturers';
+//        unset($fields['created_at']);
+//        unset($fields['updated_at']);
+//        unset($fields['lesson_id']);
+//        unset($fields['student_id']);
         return $fields;
     }
 
-    public function extraFields()
-    {
-        $more = ['lesson', 'lesson_date', 'venue', 'lecturers'];
-        $fields = array_merge(parent::fields(), $more);
-        return $fields;
-    }
+//    public function extraFields()
+//    {
+//        $more = ['lesson', 'lesson_date', 'venue', 'lecturers'];
+//        $fields = array_merge(parent::fields(), $more);
+//        return $fields;
+//    }
 }

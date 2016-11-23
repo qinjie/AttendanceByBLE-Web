@@ -3,6 +3,7 @@ namespace frontend\controllers;
 
 use api\common\models\Timetable;
 use common\components\AccessRule;
+use common\models\Attendance;
 use common\models\Lecturer;
 use common\models\Student;
 use Yii;
@@ -110,11 +111,17 @@ class SiteController extends Controller
                 }
             }
         }
+        $query_student = Attendance::find()->where(['lesson_date_id' => $lesson_date_id, 'status' => 0])->all();
+        $attended_student = [];
+        foreach ($query_student as $att){
+            $attended_student[] = $att['student_id'];
+        }
         return $this->render('index',[
             'lesson_date_id' => $lesson_date_id,
             'lecturer_id' => $lecturer_id,
             'student_list_id' => $student_list_id,
             'student_list_name' => $student_list_name,
+            'attended_student' => $attended_student,
         ]);
     }
 

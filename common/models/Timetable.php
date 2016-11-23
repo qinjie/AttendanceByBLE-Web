@@ -93,18 +93,14 @@ class Timetable extends \yii\db\ActiveRecord
     public function fields()
     {
         $fields = parent::fields();
-//        $fields[] = 'lesson_date';
-//        $fields[] = 'lecturer';
-        return $fields;
-    }
-
-    public function extraFields()
-    {
-        $extraFields = parent::extraFields();
         $fields[] = 'lesson';
         $fields[] = 'lesson_date';
         $fields[] = 'venue';
         $fields[] = 'lecturers';
-        return $extraFields;
+//        unset($fields['created_at']);
+//        unset($fields['updated_at']);
+//        unset($fields['lesson_id']);
+//        unset($fields['student_id']);
+        return $fields;
     }
 }

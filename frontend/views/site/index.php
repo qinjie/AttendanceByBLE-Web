@@ -16,6 +16,7 @@ echo "<input id='homeUrl' value='".Yii::$app->homeUrl."' hidden>";
             <td>#</td>
             <td>Name</td>
             <td>Status</td>
+            <td>Server</td>
             </thead>
             <?php
             $count = 0;
@@ -33,6 +34,18 @@ echo "<input id='homeUrl' value='".Yii::$app->homeUrl."' hidden>";
                 <td>".$count."</td>
                 <td>".$student_list_name[$i]."</td>
                 <td><input name=\"checkbox[]\" type=\"checkbox\" value=\"".$student_list_id[$i]."\"></td>
+                ";
+                if (in_array($student_list_id[$i], $attended_student)){
+                echo "
+                <td><input name=\"checkboxx\" type=\"checkbox\" value=\"".$student_list_id[$i]."\" checked></td>
+                ";
+                }
+                else{
+                echo "
+                <td><input name=\"checkboxx\" type=\"checkbox\" value=\"".$student_list_id[$i]."\"></td>
+                ";
+                }
+                echo "      
                 </tr>
                 ";
             }
@@ -41,13 +54,47 @@ echo "<input id='homeUrl' value='".Yii::$app->homeUrl."' hidden>";
             <td></td>
             <td>Total</td>
             <td><p id="total">0</p></td>
+            <td></td>
             </tfoot>
         </table>
         <div class="custom-submit">
             <input type="submit" class="btn btn-success">
         </div>
     </form>
-    <?php    \yii\widgets\Pjax::end(); ?>
+
+    <?php
+$script = <<< JS
+    document.getElementById('total').innerHTML = document.querySelectorAll('input[type="checkbox"]:checked').length
+    
+    $(document).ready(function() {
+        $('.record_table tr').click(function(event) {
+            if (event.target.type !== 'checkbox') {
+                $(':checkbox', this).trigger('click');
+                document.getElementById('total').innerHTML = document.querySelectorAll('input[type="checkbox"]:checked').length
+            }
+        });
+    });
+    
+    $("#idForm").submit(function(e) {
+        
+        var homeUrl = document.getElementById("homeUrl").value;
+        var url = homeUrl + "/site/take-attendance"; // the script where you handle the form input.
+        $.ajax({
+               type: "POST",
+               url: url,
+               data: $("#idForm").serialize(), // serializes the form's elements.
+               success: function(data)
+               {
+                   alert(data); // show response from the php script.
+               }
+             });
+    
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+    });
+JS;
+    $this->registerJs($script);
+    \yii\widgets\Pjax::end();
+    ?>
 
     <style>
         .custom-submit {
@@ -66,6 +113,10 @@ echo "<input id='homeUrl' value='".Yii::$app->homeUrl."' hidden>";
         }
 
         .record_table td:nth-child(3) {
+            text-align: center;
+            width: 50px;
+        }
+        .record_table td:nth-child(4) {
             text-align: center;
             width: 50px;
         }
@@ -90,44 +141,16 @@ echo "<input id='homeUrl' value='".Yii::$app->homeUrl."' hidden>";
 
 <?php
 $script = <<< JS
-
- $(document).ready(function() {
-    setInterval(function(){
-    $.ajax({
-        success: function(){
-            $.pjax.reload({container:"#count", async:false});
-        }
-    })
-    }, 1000);
- });
- 
-document.getElementById('total').innerHTML = document.querySelectorAll('input[type="checkbox"]:checked').length
-
 $(document).ready(function() {
-    $('.record_table tr').click(function(event) {
-        if (event.target.type !== 'checkbox') {
-            $(':checkbox', this).trigger('click');
-            document.getElementById('total').innerHTML = document.querySelectorAll('input[type="checkbox"]:checked').length
-        }
-    });
+   setInterval(function(){
+   $.ajax({
+       success: function(){
+           $.pjax.reload({container:"#count", async:false});
+       }
+   })
+   }, 10000);
 });
 
-$("#idForm").submit(function(e) {
-    
-    var homeUrl = document.getElementById("homeUrl").value;
-    var url = homeUrl + "/site/take-attendance"; // the script where you handle the form input.
-    $.ajax({
-           type: "POST",
-           url: url,
-           data: $("#idForm").serialize(), // serializes the form's elements.
-           success: function(data)
-           {
-               alert(data); // show response from the php script.
-           }
-         });
-
-    e.preventDefault(); // avoid to execute the actual submit of the form.
-});
 JS;
 $this->registerJs($script);
 ?>

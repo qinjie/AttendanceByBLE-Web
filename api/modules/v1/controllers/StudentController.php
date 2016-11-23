@@ -73,7 +73,7 @@ class StudentController extends CustomActiveController
 
     public function actionHistory(){
         $student = Student::find()->where(['user_id' => Yii::$app->user->id])->one();
-        $query = Timetable::find()->distinct('lesson_id')->where(['student_id' => $student['id']])->all();
+        $query = Timetable::find()->distinct('lesson_id')->where(['student_id' => $student['id']])->joinWith('lesson')->orderBy('lesson.catalog_number')->all();
         $count = -1;
         $list = array();
         foreach ($query as $item){

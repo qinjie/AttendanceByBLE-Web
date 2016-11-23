@@ -12,7 +12,6 @@ use Yii;
  * @property string $name
  * @property string $gender
  * @property string $acad
- * @property string $uuid
  * @property integer $user_id
  * @property string $created_at
  * @property string $updated_at
@@ -48,7 +47,6 @@ class Student extends \yii\db\ActiveRecord
             [['card', 'acad'], 'string', 'max' => 10],
             [['name'], 'string', 'max' => 255],
             [['gender'], 'string', 'max' => 1],
-            [['uuid'], 'string', 'max' => 40],
             [['card'], 'unique'],
             [['user_id'], 'unique'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
@@ -135,5 +133,17 @@ class Student extends \yii\db\ActiveRecord
     public function getTimetables()
     {
         return $this->hasMany(Timetable::className(), ['student_id' => 'id']);
+    }
+
+    public function getBeacon_user(){
+        return $this->hasOne(BeaconUser::className(), ['user_id' => 'id'])
+            ->viaTable('user', ['id' => 'user_id']);
+    }
+
+    public function fields()
+    {
+        $fields = parent::fields();
+        $fields[] = 'beacon_user';
+        return $fields;
     }
 }

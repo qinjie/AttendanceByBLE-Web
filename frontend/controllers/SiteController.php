@@ -1,7 +1,12 @@
 <?php
 namespace frontend\controllers;
 
+use api\common\models\Timetable;
+use common\components\AccessRule;
+use common\models\Lecturer;
+use common\models\Student;
 use Yii;
+use yii\base\Exception;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -26,15 +31,16 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                'ruleConfig' => [
+                    'class' => AccessRule::className(),
+                ],
                 'rules' => [
                     [
-                        'actions' => ['signup'],
+                        'actions' => ['signup', 'login', 'error'],
                         'allow' => true,
-                        'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['index', 'logout', 'take-attendance', 'lesson', 'lesson-list', 'lesson-detail', 'lesson-today'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -80,7 +86,36 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $cmd = Yii::$app->db
+            ->createCommand("select student_id, lesson_date.id, lesson_lecturer.lecturer_id from timetable INNER JOIN lesson_date on timetable.lesson_id = lesson_date.lesson_id
+            INNER JOIN lesson on timetable.lesson_id = lesson.id
+            INNER JOIN lesson_lecturer ON timetable.lesson_id = lesson_lecturer.lesson_id
+            where start_time <= '".date('H:i:s')."' and end_time >= '".date('H:i:s')."'
+            and ldate = '".date('Y-m-d')."' and lesson_lecturer.lecturer_id = (select id from lecturer where user_id = ".Yii::$app->user->id.")");
+        $result = $cmd->queryAll();
+        $lesson_date_id = 0;
+        $lecturer_id = 0;
+        $student_list_id = [];
+        $student_list_name = [];
+        if (count($result) > 0) {
+            $lesson_date_id = $result[0]['id'];
+            $lecturer_id = $result[0]['lecturer_id'];
+            $count = -1;
+            foreach ($result as $std){
+                $count++;
+                $student_list_id[$count] = $std['student_id'];
+                $student = Student::find()->where(['id' => $std['student_id']])->one();
+                if ($student){
+                    $student_list_name[$count] = $student['name'];
+                }
+            }
+        }
+        return $this->render('index',[
+            'lesson_date_id' => $lesson_date_id,
+            'lecturer_id' => $lecturer_id,
+            'student_list_id' => $student_list_id,
+            'student_list_name' => $student_list_name,
+        ]);
     }
 
     /**
@@ -217,5 +252,97 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+    public function actionLesson()
+    {
+        $searchModel = new \common\models\LessonLecturerSearch();
+        $data = $searchModel->searchRest(Yii::$app->request->queryParams)->getModels();
+        return $this->render('lesson', [
+            'data' => $data,
+        ]);
+    }
+
+    public function actionLessonList($id){
+        $searchModel = new \common\models\LessonDateSearch();
+        $list = $searchModel->search(Yii::$app->request->queryParams, $id)->getModels();
+        return $this->render('lesson_list', [
+            'list' => $list,
+        ]);
+    }
+
+    public function actionLessonToday(){
+        $searchModel = new \common\models\LessonLecturerSearch();
+        $data = $searchModel->searchRest(Yii::$app->request->queryParams, true)->getModels();
+        return $this->render('lesson_today', [
+            'data' => $data,
+        ]);
+    }
+
+    public function actionLessonDetail($id){
+        $searchModel = new \common\models\TimetableSearch();
+        $list = $searchModel->search(Yii::$app->request->queryParams, $id)->getModels();
+        $lecturer = Lecturer::find()->where(['user_id' => Yii::$app->user->id])->one();
+        return $this->render('lesson_detail', [
+            'list' => $list,
+            'lecturer_id' => $lecturer['id'],
+            'lesson_date_id' => $id,
+        ]);
+    }
+
+    public function actionTakeAttendance()
+    {
+        $student_list = $_POST['student_list'];
+        $lesson_date_id = $_POST['lesson_date_id'];
+        $recorded_time = date('H:i:s');
+        $lecturer_id = $_POST['lecturer_id'];
+        $list = $_POST['checkbox'];
+        $retake = false;
+        foreach ($student_list as $student){
+            if (in_array($student, $list)){
+                try{
+                    $cmd = Yii::$app->db
+                        ->createCommand("insert into attendance(student_id, lesson_date_id, recorded_time, lecturer_id, status) values (:student_id, :lesson_date_id, :recorded_time, :lecturer_id, 0)");
+                    $cmd->bindValue(':student_id', $student);
+                    $cmd->bindValue(':lesson_date_id', $lesson_date_id);
+                    $cmd->bindValue(':recorded_time', $recorded_time);
+                    $cmd->bindValue(':lecturer_id', $lecturer_id);
+                    $rs2 = $cmd->query();
+                }
+                catch (Exception $ex){
+                    $cmd = Yii::$app->db
+                        ->createCommand("update attendance set status = 0 where student_id = :student_id and lesson_date_id = :lesson_date_id and lecturer_id = :lecturer_id");
+                    $cmd->bindValue(':student_id', $student);
+                    $cmd->bindValue(':lesson_date_id', $lesson_date_id);
+                    $cmd->bindValue(':lecturer_id', $lecturer_id);
+                    $rs2 = $cmd->query();
+                    $retake = true;
+                }
+            }
+            else{
+                try{
+                    $cmd = Yii::$app->db
+                        ->createCommand("insert into attendance(student_id, lesson_date_id, recorded_time, lecturer_id, status) values (:student_id, :lesson_date_id, :recorded_time, :lecturer_id, -1)");
+                    $cmd->bindValue(':student_id', $student);
+                    $cmd->bindValue(':lesson_date_id', $lesson_date_id);
+                    $cmd->bindValue(':recorded_time', $recorded_time);
+                    $cmd->bindValue(':lecturer_id', $lecturer_id);
+                    $rs2 = $cmd->query();
+                }
+                catch (Exception $ex){
+                    $cmd = Yii::$app->db
+                        ->createCommand("update attendance set status = -1 where student_id = :student_id and lesson_date_id = :lesson_date_id and lecturer_id = :lecturer_id");
+                    $cmd->bindValue(':student_id', $student);
+                    $cmd->bindValue(':lesson_date_id', $lesson_date_id);
+                    $cmd->bindValue(':lecturer_id', $lecturer_id);
+                    $rs2 = $cmd->query();
+                    $retake = true;
+                }
+            }
+        }
+        if ($retake)
+            return "Retaking successfully";
+        else
+            return "Attendace taking successfully";
     }
 }

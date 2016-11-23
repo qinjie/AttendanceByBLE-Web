@@ -68,4 +68,45 @@ class LessonLecturerSearch extends LessonLecturer
 
         return $dataProvider;
     }
+
+    public function searchRest($params, $today = false)
+    {
+        $lecturer = Lecturer::find()->where(['user_id' => Yii::$app->user->id])->one();
+        if ($lecturer){
+            $query = LessonLecturer::find()->where(['lecturer_id' => $lecturer['id']]);
+            $query->join('LEFT JOIN', 'lesson', 'lesson.id = lesson_lecturer.lesson_id');
+            $query->join('LEFT JOIN', 'lesson_date', 'lesson_date.lesson_id = lesson.id')->orderBy('lesson_date.ldate, lesson.start_time ASC');
+            if ($today){
+                $query->andWhere(['lesson_date.ldate' => date("Y-m-d")]);
+            }
+        }
+        else{
+            $query = LessonLecturer::find();
+        }
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'lesson_id' => $this->lesson_id,
+            'lecturer_id' => $this->lecturer_id,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ]);
+
+        return $dataProvider;
+    }
 }

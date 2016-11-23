@@ -70,19 +70,9 @@ class Timetable extends \yii\db\ActiveRecord
         return $this->hasOne(Lesson::className(), ['id' => 'lesson_id']);
     }
 
-    public function getLessonDay(){
-        return $this->hasMany(LessonDate::className(), ['lesson_id' => 'id'])
-            ->viaTable('lesson', ['id' => 'lesson_id']);//->where(['<', 'ldate', '2016-09-26']);
-    }
-
     public function getLessonThisWeek(){
         return $this->hasOne(LessonDate::className(), ['lesson_id' => 'id'])
             ->viaTable('lesson', ['id' => 'lesson_id'])->where(['>=', 'ldate', date('Y-m-d', strtotime('monday this week'))]);
-    }
-
-    public function getLessonToday(){
-        return $this->hasOne(LessonDate::className(), ['lesson_id' => 'id'])
-            ->viaTable('lesson', ['id' => 'lesson_id'])->where(['ldate' => date("Y-m-d")]);
     }
 
     public function getLecturers(){
@@ -97,20 +87,24 @@ class Timetable extends \yii\db\ActiveRecord
 
     public function getLesson_date(){
         return $this->hasOne(LessonDate::className(), ['lesson_id' => 'id'])
-            ->viaTable('lesson', ['id' => 'lesson_id'])->where(['>=', 'ldate', date('Y-m-d', strtotime('monday this week'))])->andWhere(['<=', 'ldate', date('Y-m-d', strtotime('sunday this week'))]);
+            ->viaTable('lesson', ['id' => 'lesson_id']);
     }
 
     public function fields()
     {
         $fields = parent::fields();
+//        $fields[] = 'lesson_date';
+//        $fields[] = 'lecturer';
+        return $fields;
+    }
+
+    public function extraFields()
+    {
+        $extraFields = parent::extraFields();
         $fields[] = 'lesson';
         $fields[] = 'lesson_date';
         $fields[] = 'venue';
         $fields[] = 'lecturers';
-//        unset($fields['created_at']);
-//        unset($fields['updated_at']);
-//        unset($fields['lesson_id']);
-//        unset($fields['student_id']);
-        return $fields;
+        return $extraFields;
     }
 }

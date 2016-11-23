@@ -39,15 +39,18 @@ class LessonDateSearch extends LessonDate
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $lesson_id = null)
     {
         $query = LessonDate::find();
-
+        if ($lesson_id){
+            $query->where(['lesson_id' => $lesson_id]);
+        }
         // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+        $dataProvider->pagination = false;
 
         $this->load($params);
 

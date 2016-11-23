@@ -70,4 +70,29 @@ class LessonLecturer extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Lecturer::className(), ['id' => 'lecturer_id']);
     }
+
+    public function getVenue(){
+        return $this->hasOne(Venue::className(), ['id' => 'venue_id'])
+            ->viaTable('lesson', ['id' => 'lesson_id']);
+    }
+
+    public function getLesson_date(){
+        return $this->hasMany(LessonDate::className(), ['lesson_id' => 'id'])
+            ->viaTable('lesson', ['id' => 'lesson_id']);
+    }
+
+    public function fields()
+    {
+        $fields = parent::fields();
+        return $fields;
+    }
+
+    public function extraFields()
+    {
+        $fields = parent::fields();
+        $fields[] = 'lesson';
+        $fields[] = 'venue';
+        $fields[] = 'lesson_date';
+        return $fields;
+    }
 }

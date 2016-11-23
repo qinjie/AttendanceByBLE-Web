@@ -2,10 +2,7 @@
 namespace backend\controllers;
 
 use common\components\AccessRule;
-use common\models\User;
-
 use Yii;
-use yii\base\Exception;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -33,7 +30,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index', 'take-attendance'],
+                        'actions' => ['logout', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -101,32 +98,5 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
-    }
-
-    public function actionTakeAttendance()
-    {
-        $lesson_date_id = $_POST['lesson_date_id'];
-        $recorded_time = date('H:i:s');
-        $lecturer_id = $_POST['lecturer_id'];
-        $list = $_POST['checkbox'];
-        $retake = false;
-        foreach ($list as $item){
-            $cmd = Yii::$app->db
-                ->createCommand("insert into attendance(student_id, lesson_date_id, recorded_time, lecturer_id, status) values (:student_id, :lesson_date_id, :recorded_time, :lecturer_id, 0)");
-            $cmd->bindValue(':student_id', $item);
-            $cmd->bindValue(':lesson_date_id', $lesson_date_id);
-            $cmd->bindValue(':recorded_time', $recorded_time);
-            $cmd->bindValue(':lecturer_id', $lecturer_id);
-            try{
-                $rs2 = $cmd->query();
-            }
-            catch (Exception $ex){
-                $retake = true;
-            }
-        }
-        if ($retake)
-            return "Retaking successfully";
-        else
-            return "Attendace taking successfully";
     }
 }

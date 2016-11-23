@@ -8,10 +8,8 @@
 
 namespace api\modules\v1\controllers;
 
-use api\common\models\Attendance;
 use api\components\CustomActiveController;
 use common\components\AccessRule;
-use yii\base\Exception;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\auth\HttpBearerAuth;
@@ -19,9 +17,9 @@ use yii\filters\VerbFilter;
 use yii\web\UnauthorizedHttpException;
 use Yii;
 
-class AttendanceController extends CustomActiveController
+class LessonLecturerController extends CustomActiveController
 {
-    public $modelClass = 'api\common\models\Attendance';
+    public $modelClass = 'api\common\models\LessonLecturer';
 
     public function behaviors() {
         $behaviors = parent::behaviors();
@@ -71,9 +69,8 @@ class AttendanceController extends CustomActiveController
 
     public function prepareDataProvider()
     {
-        $searchModel = new \common\models\AttendanceSearch();
+        $searchModel = new \common\models\LessonLecturerSearch();
         $dataProvider = $searchModel->searchRest(Yii::$app->request->queryParams);
-        $query = $dataProvider->query;
         return $dataProvider;
     }
 }

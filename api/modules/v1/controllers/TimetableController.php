@@ -9,6 +9,7 @@
 namespace api\modules\v1\controllers;
 
 use api\common\models\Student;
+use api\common\models\Timetable;
 use api\components\CustomActiveController;
 use common\components\AccessRule;
 use yii\data\ActiveDataProvider;
@@ -60,7 +61,6 @@ class TimetableController extends CustomActiveController
 
         return $behaviors;
     }
-
 
     public function actions()
     {

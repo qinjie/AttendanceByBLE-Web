@@ -39,9 +39,12 @@ class TimetableSearch extends Timetable
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $lesson_date_id = null)
     {
         $query = Timetable::find();
+        if ($lesson_date_id){
+            $query->joinWith('lesson_date')->where('lesson_date.id = '.$lesson_date_id);
+        }
 
         // add conditions that should always apply here
 
@@ -75,6 +78,7 @@ class TimetableSearch extends Timetable
         $query = Timetable::find()->where(['student_id' => $student['id']]);
         $query->join('LEFT JOIN', 'lesson', 'lesson.id = timetable.lesson_id');
         $query->join('LEFT JOIN', 'lesson_date', 'lesson.id = lesson_date.lesson_id')->orderBy('lesson_date.ldate, lesson.start_time ASC');
+        $query->where(['>=', 'ldate', date('Y-m-d', strtotime('monday this week'))])->andWhere(['<=', 'ldate', date('Y-m-d', strtotime('sunday this week'))]);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([

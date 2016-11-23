@@ -81,14 +81,41 @@ class StudentController extends CustomActiveController
             $lesson = Lesson::find()->where(['id' => $item['lesson_id']])->one();
             $lesson_name = $lesson['catalog_number'];
             $total = LessonDate::find()->where(['lesson_id' => $item['lesson_id']])->count();
-            $attended = Attendance::find()->joinWith('lesson_date')->where(['attendance.student_id' => $student['id'], 'lesson_date.lesson_id' => $item['lesson_id'], 'attendance.status' => 0])->count();
+            $presented = Attendance::find()->joinWith('lesson_date')->where(['attendance.student_id' => $student['id'], 'lesson_date.lesson_id' => $item['lesson_id'], 'attendance.status' => 0])->count();
             $absented = Attendance::find()->joinWith('lesson_date')->where(['attendance.student_id' => $student['id'], 'lesson_date.lesson_id' => $item['lesson_id'], 'attendance.status' => -1])->count();
-            $list[$count]['lesson_id'] = $item['lesson_id'];
             $list[$count]['lesson_name'] = $lesson_name;
             $list[$count]['total'] = $total;
-            $list[$count]['attended'] = $attended;
+            $list[$count]['presented'] = $presented;
             $list[$count]['absented'] = $absented;
         }
-        return $list;
+        $count = -1;
+        $result = [];
+        for ($i = 0; $i < count($list); $i++){
+            $name = $list[$i]['lesson_name'];
+            $exist = false;
+            for ($j = 0; $j < $i; $j++){
+                if ($list[$j]['lesson_name'] == $name){
+                    $exist = true;
+                }
+            }
+            if ($exist == false){
+                $count++;
+                $total = 0;
+                $absented = 0;
+                $presented = 0;
+                for ($h = $i; $h < count($list); $h++){
+                    if ($list[$h]['lesson_name'] == $name){
+                        $total += $list[$h]['total'];
+                        $absented += $list[$h]['absented'];
+                        $presented += $list[$h]['presented'];
+                    }
+                }
+                $result[$count]['lesson_name'] = $name;
+                $result[$count]['total'] = $total;
+                $result[$count]['absented'] = $absented;
+                $result[$count]['presented'] = $presented;
+            }
+        }
+        return $result;
     }
 }

@@ -44,7 +44,7 @@ class TimetableSearch extends Timetable
     {
         $query = Timetable::find();
         if ($lesson_date_id){
-            $query->joinWith('lesson_date')->where('lesson_date.id = '.$lesson_date_id);
+            $query->joinWith('lessondate')->where('lesson_date.id = '.$lesson_date_id);
         }
 
         // add conditions that should always apply here

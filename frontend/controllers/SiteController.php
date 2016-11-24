@@ -41,7 +41,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['index', 'logout', 'take-attendance', 'lesson', 'lesson-list', 'lesson-detail', 'lesson-today'],
+                        'actions' => ['index', 'logout', 'lesson', 'lesson-list', 'lesson-detail', 'lesson-today', 'absent', 'present'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -288,13 +288,74 @@ class SiteController extends Controller
 
     public function actionLessonDetail($id){
         $searchModel = new \common\models\TimetableSearch();
-        $list = $searchModel->search(Yii::$app->request->queryParams, $id)->getModels();
+        $result = $searchModel->search(Yii::$app->request->queryParams, $id)->getModels();
         $lecturer = Lecturer::find()->where(['user_id' => Yii::$app->user->id])->one();
+        $student_list_id = [];
+        $student_list_name = [];
+        if (count($result) > 0) {
+            $count = -1;
+            foreach ($result as $std){
+                $count++;
+                $student_list_id[$count] = $std['student_id'];
+                $student = Student::find()->where(['id' => $std['student_id']])->one();
+                if ($student){
+                    $student_list_name[$count] = $student['name'];
+                }
+            }
+        }
+        $query_student = Attendance::find()->where(['lesson_date_id' => $id, 'status' => 0])->all();
+        $attended_student = [];
+        foreach ($query_student as $att){
+            $attended_student[] = $att['student_id'];
+        }
         return $this->render('lesson_detail', [
-            'list' => $list,
             'lecturer_id' => $lecturer['id'],
             'lesson_date_id' => $id,
+            'student_list_id' => $student_list_id,
+            'student_list_name' => $student_list_name,
+            'attended_student' => $attended_student,
         ]);
+    }
+
+    public function actionPresent($lesson_date_id, $lecturer_id, $student_id){
+        try{
+            $cmd = Yii::$app->db
+                ->createCommand("insert into attendance(student_id, lesson_date_id, recorded_time, lecturer_id, status) values (:student_id, :lesson_date_id, :recorded_time, :lecturer_id, 0)");
+            $cmd->bindValue(':student_id', $student_id);
+            $cmd->bindValue(':lesson_date_id', $lesson_date_id);
+            $cmd->bindValue(':recorded_time', date('H:i:s'));
+            $cmd->bindValue(':lecturer_id', $lecturer_id);
+            $result = $cmd->query();
+        }
+        catch (Exception $ex){
+            $cmd = Yii::$app->db
+                ->createCommand("update attendance set status = 0 where student_id = :student_id and lesson_date_id = :lesson_date_id and lecturer_id = :lecturer_id");
+            $cmd->bindValue(':student_id', $student_id);
+            $cmd->bindValue(':lesson_date_id', $lesson_date_id);
+            $cmd->bindValue(':lecturer_id', $lecturer_id);
+            $result = $cmd->query();
+        }
+        return "Success";
+    }
+
+    public function actionAbsent($lesson_date_id, $lecturer_id, $student_id){
+        try{
+            $cmd = Yii::$app->db
+                ->createCommand("insert into attendance(student_id, lesson_date_id, recorded_time, lecturer_id, status) values (:student_id, :lesson_date_id, :recorded_time, :lecturer_id, -1)");
+            $cmd->bindValue(':student_id', $student_id);
+            $cmd->bindValue(':lesson_date_id', $lesson_date_id);
+            $cmd->bindValue(':lecturer_id', $lecturer_id);
+            $result = $cmd->query();
+        }
+        catch (Exception $ex){
+            $cmd = Yii::$app->db
+                ->createCommand("update attendance set status = -1 where student_id = :student_id and lesson_date_id = :lesson_date_id and lecturer_id = :lecturer_id");
+            $cmd->bindValue(':student_id', $student_id);
+            $cmd->bindValue(':lesson_date_id', $lesson_date_id);
+            $cmd->bindValue(':lecturer_id', $lecturer_id);
+            $result = $cmd->query();
+        }
+        return "Success";
     }
 
     public function actionTakeAttendance()

@@ -10,73 +10,95 @@ echo "<input id='homeUrl' value='".Yii::$app->homeUrl."' hidden>";
             <h1 style="margin: 0px 0px 0px 0px;">Current Attendace </h1>
         </div>
     </div>
-    <form id="idForm">
-        <table class="record_table">
-            <thead>
-            <td>#</td>
-            <td>Name</td>
-            <td>Status</td>
-            </thead>
-            <?php
-            $count = 0;
-            if (count($list) > 0){
-                echo "<input type='text' name='lesson_date_id' value='".$lesson_date_id."' hidden>";
-                echo "<input type='text' name='lecturer_id' value='".$lecturer_id."' hidden>";
-                foreach ($list as $std){
-                    echo '<input type="text" name="student_list[]" value="'.$std['student_id'].'" hidden>';
-                }
-            }
-            foreach ($list as $td){
-                $count++;
-                $id = $td['student_id'];
-                $cmd = Yii::$app->db
-                    ->createCommand("select name from student where id = ".$id);
-                $rs = $cmd->queryAll();
-                $name = $rs[0]['name'];
+
+    <table class="record_table">
+        <thead>
+        <td>#</td>
+        <td>Name</td>
+        <td></td>
+        <td></td>
+        </thead>
+        <?php
+        $count = 0;
+        //            if ($lesson_date_id != 0 && $lecturer_id != 0 && count($student_list_id) > 0){
+        //                echo "<input type='text' name='lesson_date_id' value='".$lesson_date_id."' hidden>";
+        //                echo "<input type='text' name='lecturer_id' value='".$lecturer_id."' hidden>";
+        //                foreach ($student_list_id as $id){
+        //                    echo '<input type="text" name="student_list[]" value="'.$id.'" hidden>';
+        //                }
+        //            }
+        for ($i = 0; $i < count($student_list_id); $i++){
+            $count++;
+            echo "
+                <tr>
+                <td>".$count."</td>
+                <td>".$student_list_name[$i]."</td>
+                <td>
+                    <a class='absent button' href='".Yii::$app->homeUrl."site/absent?lesson_date_id=".$lesson_date_id."&lecturer_id=".$lecturer_id."&student_id=".$student_list_id[$i]."'>Absent</a>
+                </td>
+                <td>
+                    <a class='present button' href='".Yii::$app->homeUrl."site/present?lesson_date_id=".$lesson_date_id."&lecturer_id=".$lecturer_id."&student_id=".$student_list_id[$i]."'>Present</a>
+                </td>
+                </tr>
+                ";
+        }
+        ?>
+        <tfoot>
+        <td></td>
+        <td>Total</td>
+        <td></td>
+        <td></td>
+        </tfoot>
+    </table>
+
+    <?php \yii\widgets\Pjax::begin(['id' => 'count']); ?>
+
+    <table class="status_table" style="width: 10%">
+        <thead>
+        <td>Status</td>
+        </thead>
+        <?php
+        for ($i = 0; $i < count($student_list_id); $i++) {
+            if (in_array($student_list_id[$i], $attended_student)){
                 echo "
-            <tr>
-            <td>".$count."</td>
-            <td>".$name."</td>
-            <td><input name=\"checkbox[]\" type=\"checkbox\" value=\"".$id."\"></td>
-            </tr>
-            ";
+                <tr><td><img src='../../web/tick.png' width='20px' height='20px'></td></tr>
+                ";
             }
-            ?>
-            <tfoot>
-            <td></td>
-            <td>Total</td>
-            <td><p id="total">0</p></td>
-            </tfoot>
-        </table>
-        <div class="custom-submit">
-            <input type="submit" class="btn btn-success">
-        </div>
-    </form>
+            else{
+                echo "
+                    <tr><td></td></tr>
+                    ";
+            }
+        }
+        ?>
+        <tfoot>
+        <td><p id="total"></p></td>
+        </tfoot>
+        <script>
+            document.getElementById('total').innerHTML = <?php echo count($attended_student); ?> + "/" + <?php echo count($student_list_id); ?>
+        </script>
+    </table>
+    <?php
+    \yii\widgets\Pjax::end();
+    ?>
 
     <style>
-        .custom-submit {
-            margin-top: 20px;
-            padding-right: 20px;
-            float: right;
+        .absent {
+            padding-right: 10px;
         }
-
-        .record_table td:first-child {
-            text-align: center;
-            width: 50px;
-        }
-
-        .record_table td:nth-child(2) {
+        .present {
             padding-left: 10px;
         }
-
-        .record_table td:nth-child(3) {
-            text-align: center;
-            width: 50px;
-        }
+        /*.custom-submit {*/
+        /*margin-top: 20px;*/
+        /*padding-right: 10%;*/
+        /*float: right;*/
+        /*}*/
 
         .record_table {
-            width: 100%;
             border-collapse: collapse;
+            width: 85%;
+            float: left;
         }
 
         .record_table tr {
@@ -90,37 +112,64 @@ echo "<input id='homeUrl' value='".Yii::$app->homeUrl."' hidden>";
         .record_table td {
             border: 1px solid #eee;
         }
+
+        .record_table td:first-child {
+            text-align: center;
+            width: 50px;
+        }
+
+        .record_table td:nth-child(2) {
+            padding-left: 10px;
+        }
+
+        .record_table td:nth-child(3) {
+            text-align: center;
+            border-right: 0;
+            width: 70px;
+        }
+        .record_table td:nth-child(4) {
+            text-align: center;
+            border-left: 0;
+            width: 70px;
+        }
+
+        .status_table {
+            width: 15%;
+            border-collapse: collapse;
+        }
+        .status_table tr {
+            height: 50px;
+        }
+        .status_table td:first-child {
+            border-right: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
     </style>
 
 <?php
 $script = <<< JS
 
-document.getElementById('total').innerHTML = document.querySelectorAll('input[type="checkbox"]:checked').length
-
 $(document).ready(function() {
-    $('.record_table tr').click(function(event) {
-        if (event.target.type !== 'checkbox') {
-            $(':checkbox', this).trigger('click');
-            document.getElementById('total').innerHTML = document.querySelectorAll('input[type="checkbox"]:checked').length
-        }
-    });
+   setInterval(function(){
+   $.ajax({
+       success: function(){
+           $.pjax.reload({container:"#count", async:false});
+       }
+   })
+   }, 1000);
 });
 
-$("#idForm").submit(function(e) {
-    
-    var homeUrl = document.getElementById("homeUrl").value;
-    var url = homeUrl + "site/take-attendance"; // the script where you handle the form input.
-    $.ajax({
-           type: "POST",
-           url: url,
-           data: $("#idForm").serialize(), // serializes the form's elements.
-           success: function(data)
-           {
-               alert(data); // show response from the php script.
-           }
-         });
-
-    e.preventDefault(); // avoid to execute the actual submit of the form.
+$('.button').click(function (event){ 
+     event.preventDefault(); 
+     $.ajax({
+        url: $(this).attr('href')
+        ,success: function(response) {
+            alert(response)
+        }
+     })
+     return false; //for good measure
 });
 JS;
 $this->registerJs($script);

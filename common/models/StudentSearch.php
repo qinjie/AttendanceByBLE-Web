@@ -78,7 +78,7 @@ class StudentSearch extends Student
     {
         $query = Student::find();
         $query->joinWith('timetables')->where(['timetable.lesson_id' => Util::getCurrentLessonID()]);
-        $query->joinWith('lesson')->andWhere(['lesson.semester' => Util::getCurrentSemester()]);
+        $query->join('LEFT JOIN', 'lesson', 'lesson.id = timetable.lesson_id');
 
 
         // add conditions that should always apply here

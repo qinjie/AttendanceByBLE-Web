@@ -118,4 +118,11 @@ class Lecturer extends \yii\db\ActiveRecord
     public function getBeacon(){
         return $this->hasOne(BeaconUser::className(), ['user_id' => 'user_id']);
     }
+
+    public function fields()
+    {
+        $fields = parent::fields();
+        $fields[] = 'beacon';
+        return $fields;
+    }
 }

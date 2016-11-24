@@ -59,4 +59,11 @@ class LecturerController extends CustomActiveController
 
         return $behaviors;
     }
+
+    public function actionBeaconlist(){
+        $searchModel = new \common\models\LecturerSearch();
+        $dataProvider = $searchModel->searchRest(Yii::$app->request->queryParams);
+        $query = $dataProvider->query;
+        return $dataProvider;
+    }
 }

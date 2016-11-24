@@ -77,7 +77,7 @@ class LessonLecturerSearch extends LessonLecturer
             $query->join('LEFT JOIN', 'lesson', 'lesson.id = lesson_lecturer.lesson_id');
             $query->join('LEFT JOIN', 'lesson_date', 'lesson_date.lesson_id = lesson.id')->orderBy('lesson_date.ldate, lesson.start_time ASC');
             if ($today){
-                $query->andWhere(['lesson_date.ldate' => date("Y-m-d")]);
+                $query->andWhere('lesson_date.ldate = \''.date('Y-m-d').'\'');
             }
         }
         else{

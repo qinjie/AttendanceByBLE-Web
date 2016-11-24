@@ -78,7 +78,7 @@ class LessonLecturer extends \yii\db\ActiveRecord
 
     public function getLesson_date(){
         return $this->hasMany(LessonDate::className(), ['lesson_id' => 'id'])
-            ->viaTable('lesson', ['id' => 'lesson_id']);
+            ->viaTable('lesson', ['id' => 'lesson_id'])->andWhere('lesson_date.ldate = \''.date('Y-m-d').'\'');
     }
 
     public function fields()

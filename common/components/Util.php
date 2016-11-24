@@ -121,7 +121,7 @@ class Util
             LEFT JOIN lesson on timetable.lesson_id = lesson.id
             LEFT JOIN student ON timetable.student_id = student.id
             where start_time <= '".date('H:i:s')."' and end_time >= '".date('H:i:s')."'
-            and ldate = '".date('Y-m-d')."' and timetable.student_id = (select id from student where user_id = ".Yii::$app->user->id.")");
+            and ldate = '".date('Y-m-d')."' and timetable.student_id = (select id from student where user_id = ".Yii::$app->user->id.") and lesson.semester = ".self::getCurrentSemester());
         $result = $cmd->queryAll();
         if (count($result) > 0){
             return $result[0]['lesson_id'];

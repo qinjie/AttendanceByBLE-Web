@@ -10,6 +10,7 @@
     <td>#</td>
     <td>Lesson</td>
     <td>Venue</td>
+    <td>Time</td>
     </thead>
     <?php
     $count = 0;
@@ -17,11 +18,13 @@
         $count++;
         $name = $item['lesson']['catalog_number'];
         $location = $item['venue']['location'];
+        $start_end = $item['lesson']['start_time']." to ".$item['lesson']['end_time'];
         echo "
             <tr onmouseover=\"this.style.cursor='pointer'\" onclick=\"window.location ='".Yii::$app->homeUrl."site/lesson-detail?id=".$item['lesson_date'][0]['id']."'\">
             <td>".$count."</td>
             <td>".$name."</td>
             <td>".$location."</td>
+            <td>".$start_end."</td>
             </tr>
             ";
     }
@@ -45,6 +48,10 @@
     }
 
     .record_table td:nth-child(3) {
+        padding-left: 10px;
+    }
+
+    .record_table td:nth-child(4) {
         padding-left: 10px;
     }
 

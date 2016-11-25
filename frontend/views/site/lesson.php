@@ -1,4 +1,8 @@
 <?php
+
+$this->title = 'Lesson';
+$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="site-index">
     <div class="jumbotron">

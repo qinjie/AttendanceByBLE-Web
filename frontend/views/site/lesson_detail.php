@@ -2,12 +2,23 @@
 
 echo "<input id='homeUrl' value='".Yii::$app->homeUrl."' hidden>";
 
+$this->title = $lesson_name;
+if ($lesson_date){
+    $this->params['breadcrumbs'][] = ['label' => 'Lesson', 'url' => ['lesson']];
+    $this->params['breadcrumbs'][] = ['label' => $lesson_name, 'url' => ['lesson-list?id='.$lesson_id]];
+    $this->params['breadcrumbs'][] = $lesson_date;
+}
+else{
+    $this->params['breadcrumbs'][] = ['label' => 'Lesson today', 'url' => ['lesson-today']];
+    $this->params['breadcrumbs'][] = $lesson_name;
+}
+
 /* @var $this yii\web\View */
 
 ?>
     <div class="site-index">
         <div class="jumbotron">
-            <h1 style="margin: 0px 0px 0px 0px;">Current Attendace </h1>
+            <h1 style="margin: 0px 0px 0px 0px;"><?php echo $this->title;?></h1>
         </div>
     </div>
 
@@ -33,11 +44,11 @@ echo "<input id='homeUrl' value='".Yii::$app->homeUrl."' hidden>";
                 <tr>
                 <td>".$count."</td>
                 <td>".$student_list_name[$i]."</td>
-                <td>
-                    <a class='absent button' href='".Yii::$app->homeUrl."site/absent?lesson_date_id=".$lesson_date_id."&lecturer_id=".$lecturer_id."&student_id=".$student_list_id[$i]."'>Absent</a>
+                <td align='center'>
+                   <a class='button' href='".Yii::$app->homeUrl."site/absent?lesson_date_id=".$lesson_date_id."&lecturer_id=".$lecturer_id."&student_id=".$student_list_id[$i]."'><img src='../../web/x.png' height='20' width='20'><br>Absent</a>
                 </td>
-                <td>
-                    <a class='present button' href='".Yii::$app->homeUrl."site/present?lesson_date_id=".$lesson_date_id."&lecturer_id=".$lecturer_id."&student_id=".$student_list_id[$i]."'>Present</a>
+                <td align='center'>
+                    <a class='button' href='".Yii::$app->homeUrl."site/present?lesson_date_id=".$lesson_date_id."&lecturer_id=".$lecturer_id."&student_id=".$student_list_id[$i]."'><img src='../../web/tick.png' height='20' width='20'><br>Present</a>
                 </td>
                 </tr>
                 ";
@@ -83,12 +94,6 @@ echo "<input id='homeUrl' value='".Yii::$app->homeUrl."' hidden>";
     ?>
 
     <style>
-        .absent {
-            padding-right: 10px;
-        }
-        .present {
-            padding-left: 10px;
-        }
         /*.custom-submit {*/
         /*margin-top: 20px;*/
         /*padding-right: 10%;*/

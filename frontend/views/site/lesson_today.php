@@ -1,8 +1,10 @@
 <?php
+$this->title = 'Lesson today';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-index">
     <div class="jumbotron">
-        <h1 style="margin: 0px 0px 0px 0px;">Lesson</h1>
+        <h1 style="margin: 0px 0px 0px 0px;"><?php echo $this->title;?></h1>
     </div>
 </div>
 <table class="record_table">

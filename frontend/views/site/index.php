@@ -1,5 +1,6 @@
 <?php
 echo "<input id='homeUrl' value='".Yii::$app->homeUrl."' hidden>";
+$this->title = "Current Lesson"
 
 /* @var $this yii\web\View */
 
@@ -32,11 +33,11 @@ echo "<input id='homeUrl' value='".Yii::$app->homeUrl."' hidden>";
                 <tr>
                 <td>".$count."</td>
                 <td>".$student_list_name[$i]."</td>
-                <td>
-                    <a class='absent button' href='".Yii::$app->homeUrl."site/absent?lesson_date_id=".$lesson_date_id."&lecturer_id=".$lecturer_id."&student_id=".$student_list_id[$i]."'>Absent</a>
+                <td align='center'>
+                   <a class='button' href='".Yii::$app->homeUrl."site/absent?lesson_date_id=".$lesson_date_id."&lecturer_id=".$lecturer_id."&student_id=".$student_list_id[$i]."'><img src='../../web/x.png' height='20' width='20'><br>Absent</a>
                 </td>
-                <td>
-                    <a class='present button' href='".Yii::$app->homeUrl."site/present?lesson_date_id=".$lesson_date_id."&lecturer_id=".$lecturer_id."&student_id=".$student_list_id[$i]."'>Present</a>
+                <td align='center'>
+                    <a class='button' href='".Yii::$app->homeUrl."site/present?lesson_date_id=".$lesson_date_id."&lecturer_id=".$lecturer_id."&student_id=".$student_list_id[$i]."'><img src='../../web/tick.png' height='20' width='20'><br>Present</a>
                 </td>
                 </tr>
                 ";
@@ -85,12 +86,6 @@ echo "<input id='homeUrl' value='".Yii::$app->homeUrl."' hidden>";
     <!--        </div>-->
 
     <style>
-        .absent {
-            padding-right: 10px;
-        }
-        .present {
-            padding-left: 10px;
-        }
         /*.custom-submit {*/
             /*margin-top: 20px;*/
             /*padding-right: 10%;*/
@@ -125,12 +120,10 @@ echo "<input id='homeUrl' value='".Yii::$app->homeUrl."' hidden>";
         }
 
         .record_table td:nth-child(3) {
-            text-align: center;
             border-right: 0;
             width: 70px;
         }
         .record_table td:nth-child(4) {
-            text-align: center;
             border-left: 0;
             width: 70px;
         }

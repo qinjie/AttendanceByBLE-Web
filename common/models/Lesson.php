@@ -128,6 +128,6 @@ class Lesson extends \yii\db\ActiveRecord
     }
 
     public function getLessonDate(){
-        return $this->hasMany(LessonDate::className(), ['id' => 'lesson_id']);
+        return $this->hasMany(LessonDate::className(), ['lesson_id' => 'id']);
     }
 }

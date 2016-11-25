@@ -5,6 +5,8 @@ use api\common\models\Timetable;
 use common\components\AccessRule;
 use common\models\Attendance;
 use common\models\Lecturer;
+use common\models\Lesson;
+use common\models\LessonDate;
 use common\models\Student;
 use Yii;
 use yii\base\Exception;
@@ -133,7 +135,7 @@ class SiteController extends Controller
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+            return $this->redirect(Yii::$app->homeUrl.'site/index');
         }
 
         $model = new LoginForm();
@@ -271,10 +273,13 @@ class SiteController extends Controller
     }
 
     public function actionLessonList($id){
+        $lesson = Lesson::find()->where(['id' => $id])->one();
+        $lesson_name = $lesson['catalog_number'];
         $searchModel = new \common\models\LessonDateSearch();
         $list = $searchModel->search(Yii::$app->request->queryParams, $id)->getModels();
         return $this->render('lesson_list', [
             'list' => $list,
+            'lesson_name' => $lesson_name,
         ]);
     }
 
@@ -286,7 +291,10 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionLessonDetail($id){
+    public function actionLessonDetail($id, $lesson_date = null){
+        $lesson = Lesson::find()->joinWith('lessonDate')->where(['lesson_date.id' => $id])->one();
+        $lesson_name = $lesson['catalog_number'];
+        $lesson_id = $lesson['id'];
         $searchModel = new \common\models\TimetableSearch();
         $result = $searchModel->search(Yii::$app->request->queryParams, $id)->getModels();
         $lecturer = Lecturer::find()->where(['user_id' => Yii::$app->user->id])->one();
@@ -314,6 +322,9 @@ class SiteController extends Controller
             'student_list_id' => $student_list_id,
             'student_list_name' => $student_list_name,
             'attended_student' => $attended_student,
+            'lesson_date' => $lesson_date,
+            'lesson_name' => $lesson_name,
+            'lesson_id' => $lesson_id,
         ]);
     }
 

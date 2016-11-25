@@ -2,7 +2,7 @@
 
 echo "<input id='homeUrl' value='".Yii::$app->homeUrl."' hidden>";
 
-$this->title = $lesson_name;
+$this->title = 'Lesson detail';
 if ($lesson_date){
     $this->params['breadcrumbs'][] = ['label' => 'Lesson', 'url' => ['lesson']];
     $this->params['breadcrumbs'][] = ['label' => $lesson_name, 'url' => ['lesson-list?id='.$lesson_id]];
@@ -10,7 +10,7 @@ if ($lesson_date){
 }
 else{
     $this->params['breadcrumbs'][] = ['label' => 'Lesson today', 'url' => ['lesson-today']];
-    $this->params['breadcrumbs'][] = $lesson_name;
+    $this->params['breadcrumbs'][] = $this->ti;
 }
 
 /* @var $this yii\web\View */
@@ -156,15 +156,11 @@ else{
 <?php
 $script = <<< JS
 
-$(document).ready(function() {
-   setInterval(function(){
-   $.ajax({
-       success: function(){
-           $.pjax.reload({container:"#count", async:false});
-       }
-   })
-   }, 1000);
-});
+function refresh() {
+     $.pjax.reload({container:"#count"});
+     setTimeout(refresh, 1000); // restart the function every 5 seconds
+ }
+refresh();
 
 $('.button').click(function (event){ 
      event.preventDefault(); 

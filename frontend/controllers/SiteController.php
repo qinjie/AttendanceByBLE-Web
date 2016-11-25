@@ -43,7 +43,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['index', 'logout', 'lesson', 'lesson-list', 'lesson-detail', 'lesson-today', 'absent', 'present'],
+                        'actions' => ['index', 'logout', 'lesson', 'lesson-list', 'lesson-detail', 'lesson-today', 'absent', 'present', 'pusher'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -87,6 +87,12 @@ class SiteController extends Controller
      *
      * @return mixed
      */
+
+
+    public function actionPusher(){
+        return $this->render('pusher');
+    }
+
     public function actionIndex()
     {
         $cmd = Yii::$app->db

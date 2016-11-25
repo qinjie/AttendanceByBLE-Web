@@ -5,14 +5,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <div class="site-index">
-    <div class="jumbotron">
-        <h1 style="margin: 0px 0px 0px 0px;"><?php echo $this->title;?></h1>
+    <div class="custom-title">
+        <?php echo $this->title; ?>
     </div>
 </div>
+
 <table class="record_table">
-    <thead>
-    <td>#</td>
-    <td>Date</td>
+    <thead style="background-color: #FAFAFA; font-weight: bold">
+        <tr>
+            <td>#</td>
+            <td>Date</td>
+        </tr>
     </thead>
     <?php
     $count = 0;

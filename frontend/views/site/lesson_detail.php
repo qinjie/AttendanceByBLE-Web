@@ -17,17 +17,19 @@ else{
 
 ?>
     <div class="site-index">
-        <div class="jumbotron">
-            <h1 style="margin: 0px 0px 0px 0px;"><?php echo $this->title;?></h1>
+        <div class="custom-title">
+            <?php echo $this->title; ?>
         </div>
     </div>
 
     <table class="record_table">
-        <thead>
-        <td>#</td>
-        <td>Name</td>
-        <td></td>
-        <td></td>
+        <thead style="background-color: #FAFAFA; font-weight: bold">
+            <tr>
+                <td>#</td>
+                <td>Name</td>
+                <td></td>
+                <td></td>
+            </tr>
         </thead>
         <?php
         $count = 0;
@@ -55,18 +57,22 @@ else{
         }
         ?>
         <tfoot>
-        <td></td>
-        <td>Total</td>
-        <td></td>
-        <td></td>
+            <tr>
+                <td></td>
+                <td>Total</td>
+                <td></td>
+                <td></td>
+            </tr>
         </tfoot>
     </table>
 
-    <?php \yii\widgets\Pjax::begin(['id' => 'count']); ?>
+<?php \yii\widgets\Pjax::begin(['id' => 'count']); ?>
 
     <table class="status_table" style="width: 10%">
-        <thead>
-        <td>Status</td>
+        <thead style="background-color: #FAFAFA; font-weight: bold">
+        <tr>
+            <td>Status</td>
+        </tr>
         </thead>
         <?php
         for ($i = 0; $i < count($student_list_id); $i++) {
@@ -83,7 +89,9 @@ else{
         }
         ?>
         <tfoot>
-        <td><p id="total"></p></td>
+        <tr>
+            <td><p id="total"></p></td>
+        </tr>
         </tfoot>
         <script>
             document.getElementById('total').innerHTML = <?php echo count($attended_student); ?> + "/" + <?php echo count($student_list_id); ?>

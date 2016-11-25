@@ -10,7 +10,7 @@ if ($lesson_date){
 }
 else{
     $this->params['breadcrumbs'][] = ['label' => 'Lesson today', 'url' => ['lesson-today']];
-    $this->params['breadcrumbs'][] = $this->ti;
+    $this->params['breadcrumbs'][] = $this->title;
 }
 
 /* @var $this yii\web\View */

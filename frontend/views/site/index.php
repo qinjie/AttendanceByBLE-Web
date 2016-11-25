@@ -155,21 +155,21 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
 $script = <<< JS
 
-// $(document).ready(function() {
-//    setInterval(function(){
-//    $.ajax({
-//        success: function(){
-//            $.pjax.reload({container:"#count", async:false});
-//        }
-//    })
-//    }, 1000);
-// });
+$(document).ready(function() {
+   setInterval(function(){
+   $.ajax({
+       success: function(){
+           $.pjax.reload({container:"#count", async:false});
+       }
+   })
+   }, 1000);
+});
 
-function refresh() {
-     $.pjax.reload({container:"#count"});
-     setTimeout(refresh, 1000); // restart the function every 5 seconds
- }
-refresh();
+// function refresh() {
+//      $.pjax.reload({container:"#count"});
+//      setTimeout(refresh, 1000); // restart the function every 5 seconds
+//  }
+// refresh();
 
 $('.button').click(function (event){ 
      event.preventDefault(); 

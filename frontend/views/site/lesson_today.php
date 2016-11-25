@@ -8,23 +8,23 @@
 <table class="record_table">
     <thead>
     <td>#</td>
+    <td>Time</td>
     <td>Lesson</td>
     <td>Venue</td>
-    <td>Time</td>
     </thead>
     <?php
     $count = 0;
     foreach ($data as $item){
         $count++;
         $name = $item['lesson']['catalog_number'];
-        $location = $item['venue']['location'];
-        $start_end = $item['lesson']['start_time']." to ".$item['lesson']['end_time'];
+        $location = $item['venue']['name']." (".$item['venue']['location'].")";
+        $start_end = substr($item['lesson']['start_time'], 0, 5)." to ".substr($item['lesson']['end_time'], 0, 5);
         echo "
             <tr onmouseover=\"this.style.cursor='pointer'\" onclick=\"window.location ='".Yii::$app->homeUrl."site/lesson-detail?id=".$item['lesson_date'][0]['id']."'\">
             <td>".$count."</td>
-            <td>".$name."</td>
-            <td>".$location."</td>
             <td>".$start_end."</td>
+           <td>".$name."</td>
+            <td>".$location."</td>
             </tr>
             ";
     }

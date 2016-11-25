@@ -96,7 +96,7 @@ return [
                 [
                     'class' => RestUrlRule::className(),
                     'pluralize' => false,
-                    'controller' => ['v1/timetable', 'v1/lesson', 'v1/student', 'v1/lesson', 'v1/beacon-lesson', 'v1/lesson-lecturer', 'v1/attendance'],
+                    'controller' => ['v1/timetable', 'v1/lesson', 'v1/student', 'v1/lesson', 'v1/beacon-lesson', 'v1/lesson-lecturer', 'v1/attendance', 'v1/venue'],
                     'extraPatterns' => []
                 ],
 

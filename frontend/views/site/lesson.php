@@ -16,7 +16,7 @@
         foreach ($data as $item){
             $count++;
             $name = $item['lesson']['catalog_number'];
-            $location = $item['venue']['location'];
+            $location = $item['venue']['name']." (".$item['venue']['location'].")";
             echo "
             <tr onmouseover=\"this.style.cursor='pointer'\" onclick=\"window.location ='".Yii::$app->homeUrl."site/lesson-list?id=".$item['lesson_id']."'\">
             <td>".$count."</td>

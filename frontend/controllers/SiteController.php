@@ -135,12 +135,12 @@ class SiteController extends Controller
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
-            return $this->redirect(Yii::$app->homeUrl.'site/index');
+            return $this->goHome();
         }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            return $this->redirect('index');
         } else {
             return $this->render('login', [
                 'model' => $model,
@@ -324,7 +324,7 @@ class SiteController extends Controller
             'attended_student' => $attended_student,
             'lesson_date' => $lesson_date,
             'lesson_name' => $lesson_name,
-            'lesson_id' => $lesson_id,
+            'lesson_id' => $lesson_name,
         ]);
     }
 

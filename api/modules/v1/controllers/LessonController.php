@@ -10,6 +10,9 @@ namespace api\modules\v1\controllers;
 
 use api\components\CustomActiveController;
 use common\components\AccessRule;
+use common\models\Lesson;
+use common\models\SemesterInfo;
+use common\models\Student;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\auth\HttpBearerAuth;
@@ -58,5 +61,31 @@ class LessonController extends CustomActiveController
         ];
 
         return $behaviors;
+    }
+
+    public function actionWeekOdd(){
+        $student = Student::find()->where(['user_id' => Yii::$app->user->id])->one();
+        $query = Lesson::find()->joinWith('timetables')->joinWith('venue')->joinWith('lecturers')->where(['timetable.student_id' => $student['id']])->andWhere('meeting_pattern = \'\' or meeting_pattern = \'ODD\'')->orderBy('lesson.weekday, lesson.start_time ASC');
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+        return $dataProvider;
+    }
+
+    public function actionWeekEven(){
+        $student = Student::find()->where(['user_id' => Yii::$app->user->id])->one();
+        $query = Lesson::find()->joinWith('timetables')->joinWith('venue')->joinWith('lecturers')->where(['timetable.student_id' => $student['id']])->andWhere('meeting_pattern = \'\' or meeting_pattern = \'EVEN\'')->orderBy('lesson.weekday, lesson.start_time ASC');
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+        return $dataProvider;
+    }
+
+    public function actionWeek(){
+        $query = SemesterInfo::find()->andWhere('start_date <= \''.date('Y-m-d').'\' and end_date >= \''.('Y-m-d').'\'')->one();
+        $interval = (new \DateTime($query['start_date']))->diff((new \DateTime(date('Y-m-d'))));
+        $day = $interval->format('%a');
+        $weeknum = ceil($day/7);
+        return $weeknum;
     }
 }

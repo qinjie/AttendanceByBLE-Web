@@ -99,7 +99,6 @@ return [
                     'controller' => ['v1/timetable', 'v1/lesson', 'v1/student', 'v1/lesson', 'v1/beacon-lesson', 'v1/lesson-lecturer', 'v1/attendance', 'v1/venue'],
                     'extraPatterns' => []
                 ],
-
                 ['class' => RestUrlRule::className(), 'controller' => ['v1/lesson-date'], 'extraPatterns' => ['GET search' => 'search']],
                 ['class' => RestUrlRule::className(), 'controller' => ['v1/lecturer'], 'extraPatterns' => ['GET beaconlist' => 'beaconlist']],
             ],

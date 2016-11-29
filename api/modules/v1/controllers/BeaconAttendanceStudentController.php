@@ -63,6 +63,34 @@ class BeaconAttendanceStudentController extends CustomActiveController
         return $behaviors;
     }
 
+    public function actionStudentList(){
+        $params = Yii::$app->request->post();
+        $student_id = $params[0]['student_id_1'];
+        $lesson_date_id = $params[0]['lesson_date_id'];
+        Yii::$app->db->createCommand()->batchInsert(BeaconAttendanceStudent::tableName(), ['lesson_date_id', 'student_id_1', 'student_id_2', 'status'], $params)->execute();
+        $count = BeaconAttendanceStudent::find()->where(['lesson_date_id' => $lesson_date_id, 'student_id_1' => $student_id])->count();
+        $lecturer = BeaconAttendanceLecturer::find()->where(['lesson_date_id' => $lesson_date_id, 'student_id' => $student_id])->one();
+        $lecturer_id = $lecturer['lecturer_id'];
+        if ($count > 1 && $lecturer_id){
+            $result2 = Yii::$app->db->createCommand()
+                ->insert('attendance', ['student_id' => $student_id, 'lesson_date_id' => $lesson_date_id, 'recorded_time' => date('H:i:s'), 'lecturer_id' => $lecturer_id, 'status' => 0])->execute();
+            if ($result2 == 1){
+                return "Attendance taking successfully";
+            }
+            else{
+                return "Server Error";
+            }
+        }
+        else{
+            if ($count > 1){
+                return "Wating for lecturer verification";
+            }
+            if ($lecturer_id){
+                return "Wating for student verification";
+            }
+        }
+    }
+
 
     public function afterAction($action, $result)
     {
@@ -70,7 +98,7 @@ class BeaconAttendanceStudentController extends CustomActiveController
             $count = BeaconAttendanceStudent::find()->where(['lesson_date_id' => $result['lesson_date_id'], 'student_id_1' => $result['student_id_1']])->count();
             $lecturer = BeaconAttendanceLecturer::find()->where(['lesson_date_id' => $result['lesson_date_id'], 'student_id' => $result['student_id_1']])->one();
             $lecturer_id = $lecturer['lecturer_id'];
-            if ($count >= 1 && $lecturer_id){
+            if ($count > 1 && $lecturer_id){
                 $result2 = Yii::$app->db->createCommand()
                     ->insert('attendance', ['student_id' => $result['student_id_1'], 'lesson_date_id' => $result['lesson_date_id'], 'recorded_time' => date('H:i:s'), 'lecturer_id' => $lecturer_id, 'status' => 0])->execute();
                 if ($result2 == 1){
@@ -78,11 +106,10 @@ class BeaconAttendanceStudentController extends CustomActiveController
                 }
                 else{
                     return "Server Error";
-
                 }
             }
             else{
-                if ($count >= 1){
+                if ($count > 1){
                     return "Wating for lecturer verification";
                 }
                 if ($lecturer_id){

@@ -41,9 +41,10 @@ $this->title = 'Login';
         </div>
         <div class="login-box-body">
             <div align="center">
-                <?= Html::a('Login', ['login'], ['class' => 'btn btn-success']) ?>
-                <?= Html::a('Sign up', ['signup'], ['class' => 'btn btn-success']) ?>
+                <?= Html::a('Login', ['login'], ['class' => 'btn btn-primary']) ?>
+                <?= Html::a('Sign up', ['signup'], ['class' => 'btn btn-default']) ?>
             </div>
+            <br>
 
             <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
 

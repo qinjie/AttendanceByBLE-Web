@@ -34,9 +34,11 @@ $this->title = 'Signup';
         </div>
         <div class="register-box-body">
             <div align="center">
-                <?= Html::a('Login', ['login'], ['class' => 'btn btn-success']) ?>
-                <?= Html::a('Sign up', ['signup'], ['class' => 'btn btn-success']) ?>
+                <?= Html::a('Login', ['login'], ['class' => 'btn btn-default']) ?>
+                <?= Html::a('Sign up', ['signup'], ['class' => 'btn btn-primary']) ?>
             </div>
+            <br>
+            
             <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
 
                 <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>

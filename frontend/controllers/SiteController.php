@@ -140,6 +140,7 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
+        $this->layout = 'user';
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -206,6 +207,7 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
+        $this->layout = 'user';
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {

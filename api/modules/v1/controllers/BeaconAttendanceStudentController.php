@@ -127,4 +127,5 @@ class BeaconAttendanceStudentController extends CustomActiveController
 //            return $result;
 //        }
 //    }
+
 }

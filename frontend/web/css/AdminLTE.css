@@ -3275,7 +3275,7 @@ table.text-center th {
 }
 .error-page > .headline {
   float: left;
-  font-size: 100px;
+  font-size: 50px;
   font-weight: 300;
 }
 @media (max-width: 991px) {

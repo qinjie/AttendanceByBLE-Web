@@ -38,7 +38,7 @@ $this->title = 'Signup';
                 <?= Html::a('Sign up', ['signup'], ['class' => 'btn btn-primary']) ?>
             </div>
             <br>
-            
+
             <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
 
                 <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>

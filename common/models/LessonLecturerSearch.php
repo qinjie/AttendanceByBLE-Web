@@ -71,9 +71,8 @@ class LessonLecturerSearch extends LessonLecturer
 
     public function searchRest($params, $today = false)
     {
-        $query = LessonLecturer::find();
         $lecturer = Lecturer::find()->where(['user_id' => Yii::$app->user->id])->one();
-        if ($lecturer && $today){
+        if ($lecturer){
             $query = LessonLecturer::find()->where(['lecturer_id' => $lecturer['id']]);
             $query->join('LEFT JOIN', 'lesson', 'lesson.id = lesson_lecturer.lesson_id');
             $query->join('LEFT JOIN', 'lesson_date', 'lesson_date.lesson_id = lesson.id')->orderBy('lesson_date.ldate, lesson.start_time ASC');
@@ -81,16 +80,16 @@ class LessonLecturerSearch extends LessonLecturer
                 $query->andWhere('lesson_date.ldate = \''.date('Y-m-d').'\'');
             }
         }
-        else {
-            if ($today){
-                $query = LessonLecturer::find()->where('0=1');
-            }
+        else{
+            $query = LessonLecturer::find()->andWhere('0=1');
         }
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+        $dataProvider->pagination = false;
 
         $this->load($params);
 

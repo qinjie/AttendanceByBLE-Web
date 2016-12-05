@@ -65,7 +65,7 @@ class LessonController extends CustomActiveController
 
     public function actionWeekOdd(){
         $student = Student::find()->where(['user_id' => Yii::$app->user->id])->one();
-        $query = Lesson::find()->joinWith('timetables')->joinWith('venue')->joinWith('lecturers')->where(['timetable.student_id' => $student['id']])->andWhere('meeting_pattern = \'\' or meeting_pattern = \'ODD\'')->orderBy('lesson.weekday, lesson.start_time ASC');
+        $query = Lesson::find()->joinWith('venue')->joinWith('lecturers')->joinWith('student')->where(['timetable.student_id' => $student['id']])->andWhere('meeting_pattern = \'\' or meeting_pattern = \'ODD\'')->orderBy('lesson.weekday, lesson.start_time ASC');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -74,7 +74,7 @@ class LessonController extends CustomActiveController
 
     public function actionWeekEven(){
         $student = Student::find()->where(['user_id' => Yii::$app->user->id])->one();
-        $query = Lesson::find()->joinWith('timetables')->joinWith('venue')->joinWith('lecturers')->where(['timetable.student_id' => $student['id']])->andWhere('meeting_pattern = \'\' or meeting_pattern = \'EVEN\'')->orderBy('lesson.weekday, lesson.start_time ASC');
+        $query = Lesson::find()->joinWith('venue')->joinWith('lecturers')->joinWith('student')->where(['timetable.student_id' => $student['id']])->andWhere('meeting_pattern = \'\' or meeting_pattern = \'EVEN\'')->orderBy('lesson.weekday, lesson.start_time ASC');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);

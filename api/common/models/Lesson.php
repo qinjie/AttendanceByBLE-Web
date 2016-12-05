@@ -7,7 +7,7 @@ class Lesson extends \common\models\Lesson
 {
     public function extraFields()
     {
-        $more = ['lecturers', 'beaconLecturers'];
+        $more = [];
         $fields = array_merge(parent::fields(), $more);
         return $fields;
     }

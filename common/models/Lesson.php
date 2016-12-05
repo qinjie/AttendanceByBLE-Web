@@ -116,7 +116,7 @@ class Lesson extends \yii\db\ActiveRecord
      */
     public function getLecturers()
     {
-        return $this->hasMany(Lecturer::className(), ['id' => 'lecturer_id'])->viaTable('lesson_lecturer', ['lesson_id' => 'id']);
+        return $this->hasOne(Lecturer::className(), ['id' => 'lecturer_id'])->viaTable('lesson_lecturer', ['lesson_id' => 'id']);
     }
 
     /**
@@ -127,7 +127,7 @@ class Lesson extends \yii\db\ActiveRecord
         return $this->hasMany(Timetable::className(), ['lesson_id' => 'id']);
     }
 
-    public function getLessonDate(){
-        return $this->hasMany(LessonDate::className(), ['lesson_id' => 'id']);
+    public function getStudent(){
+        return $this->hasMany(Student::className(), ['id' => 'student_id'])->viaTable('timetable', ['lesson_id' => 'id']);
     }
 }

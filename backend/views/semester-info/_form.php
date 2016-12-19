@@ -14,13 +14,33 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'start_date')->textInput() ?>
+    <?php echo '<label class="control-label">Start date</label>';?>
+    <?=
+    kartik\date\DatePicker::widget([
+        'model' => $model,
+        'attribute' => 'start_date',
+        'options' => ['placeholder' => 'Enter start date ...'],
+        'pluginOptions' => [
+            'autoclose' => true,
+            'format' => 'yyyy-mm-dd',
+        ]
+    ]);
+    ?>
+    <br>
+    <?php echo '<label class="control-label">End date</label>';?>
+    <?=
+    kartik\date\DatePicker::widget([
+        'model' => $model,
+        'attribute' => 'end_date',
+        'options' => ['placeholder' => 'Enter end date ...'],
+        'pluginOptions' => [
+            'autoclose' => true,
+            'format' => 'yyyy-mm-dd',
+        ]
+    ]);
+    ?>
 
-    <?= $form->field($model, 'end_date')->textInput() ?>
-
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
+    <br>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

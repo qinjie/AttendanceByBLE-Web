@@ -65,8 +65,65 @@ class SemesterInfoController extends Controller
     {
         $model = new SemesterInfo();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $begin = new \DateTime($model->start_date);
+            $beforeDate = new \DateTime(date('Y-m-d', strtotime($model->start_date . ' -1 day' )));
+            $afterDate = new \DateTime(date('Y-m-d', strtotime($model->end_date . ' +1 day' )));
+            $interval = \DateInterval::createFromDateString('1 day');
+            $period = new \DatePeriod($begin, $interval, $afterDate);
+            $start_weekday = date('w', strtotime($begin->format('Y-m-d')));
+            $weeknum = 1;
+            if ($start_weekday == 1){
+                $weeknum = 0;
+            }
+            foreach ( $period as $dt ){
+                $tdate = $dt->format( "Y-m-d" );
+                $weekday = date('w', strtotime($dt->format('Y-m-d')));
+                $weekday++;
+                if ($weekday==1) $weekday = 8;
+                if ($weekday==2) $weeknum++;
+                $is_holiday = false;
+                $cmd = Yii::$app->db
+                    ->createCommand("select hdate from  public_holiday where hdate = :tdate");
+                $cmd->bindValue(':tdate', $tdate);
+                $result = $cmd->query();
+                if (count($result) > 0){
+                    $is_holiday = true;
+                }
+                $cmd = Yii::$app->db
+                    ->createCommand("insert into semester_date(semester_id, tdate, week_num, weekday, is_holiday) values (1, :tdate, :weeknum, :weekday, :is_holiday)");
+                $cmd->bindValue(':tdate', $tdate);
+                $cmd->bindValue(':weeknum', $weeknum);
+                $cmd->bindValue(':weekday', $weekday);
+                $cmd->bindValue(':is_holiday', $is_holiday);
+                $result = $cmd->query();
+            }
+
+            $cmd = Yii::$app->db
+                ->createCommand("select tdate, week_num, weekday from semester_date where is_holiday = 0 and tdate >= ".$model->start_date." and tdate <= ".$model->end_date."");
+            $result = $cmd->queryAll();
+            foreach ($result as $td){
+                $ldate = $td['tdate'];
+                $week_num = $td['week_num'];
+                $weekday = $td['weekday'];
+
+                $cmd = Yii::$app->db
+                    ->createCommand("select id from lesson where weekday = :weekday");
+                $cmd->bindValue(':weekday', $weekday);
+                $lesson = $cmd->queryAll();
+
+                foreach ($lesson as $ls){
+                    $lesson_id = $ls['id'];
+                    $cmd = Yii::$app->db
+                        ->createCommand("insert into lesson_date(lesson_id, ldate, updated_by) values (:lession_id, :ldate, 1)");
+                    $cmd->bindValue(':lession_id', $lesson_id);
+                    $cmd->bindValue(':ldate', $ldate);
+                    $result = $cmd->query();
+                }
+            }
+            if ($model->save()){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,

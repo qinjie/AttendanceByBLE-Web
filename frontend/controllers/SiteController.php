@@ -300,7 +300,7 @@ class SiteController extends Controller
     }
 
     public function actionLessonDetail($id, $lesson_date = null){
-        $lesson = Lesson::find()->joinWith('lessonDate')->where(['lesson_date.id' => $id])->one();
+        $lesson = Lesson::find()->joinWith('lessonDates')->where(['lesson_date.id' => $id])->one();
         $lesson_name = $lesson['catalog_number'];
         $lesson_id = $lesson['id'];
         $searchModel = new \common\models\TimetableSearch();
@@ -332,7 +332,7 @@ class SiteController extends Controller
             'attended_student' => $attended_student,
             'lesson_date' => $lesson_date,
             'lesson_name' => $lesson_name,
-            'lesson_id' => $lesson_name,
+            'lesson_id' => $lesson_id,
         ]);
     }
 

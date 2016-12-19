@@ -239,9 +239,9 @@ $this->registerJs($script);
 //    $cmd->bindValue(':tdate', $tdate);
 //    $result = $cmd->query();
 //    if (count($result) > 0){
-//    $cmd = Yii::$app->db
 //        $is_holiday = true;
 //    }
+//    $cmd = Yii::$app->db
 //        ->createCommand("insert into semester_date(semester_id, tdate, week_num, weekday, is_holiday) values (1, :tdate, :weeknum, :weekday, :is_holiday)");
 //    $cmd->bindValue(':tdate', $tdate);
 //    $cmd->bindValue(':weeknum', $weeknum);

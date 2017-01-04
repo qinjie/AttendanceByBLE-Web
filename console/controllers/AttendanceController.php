@@ -25,7 +25,9 @@ class AttendanceController extends \yii\console\Controller
 
     public function actionGenerate()
     {
+        $this->stdout("Hello?\n", Console::BOLD);
         if (!$this->fromDate || !$this->toDate || !$this->semester) {
+
             $usage = $this->ansiFormat('./yii attendance/generate --fromDate="YYYY-MM-DD" --toDate="YYYY-MM-DD" --semester="number"', Console::BOLD);
             $this->stdout("\nUsage: $usage\n\n");
             $this->stdout("Generate attendance records from <fromDate> to <toDate>, inclusively\n");
@@ -40,7 +42,7 @@ class AttendanceController extends \yii\console\Controller
         $semester = intval($this->semester);
         $startTime = strtotime($this->fromDate);
         $endTime = strtotime($this->toDate);
-
+        $this->stdout("Hello?1\n", Console::BOLD);
         Util::generateAttendance($semester, $startTime, $endTime);
     }
 }

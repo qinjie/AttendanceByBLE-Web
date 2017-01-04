@@ -18,25 +18,32 @@ class Util
             $weekday = self::getWeekday($iterDay);
             $meetingPattern = self::getMeetingPattern($startTime, $iterDay);
 
-            // echo $weekday . " " . $meetingPattern . " " . date('Y-m-d', $iterDay) ."\n";
+//            echo $weekday . " " . $meetingPattern . " " . date('Y-m-d', $iterDay) ."\n";
             $searchLesson = new LessonSearch();
             $searchLesson->semester = $semester;
             $searchLesson->weekday = $weekday;
             $searchLesson->meeting_pattern = $meetingPattern;
             $lessonProvider = $searchLesson->search(null);
+
             $lessonQuery = $lessonProvider->query;
             $lessonQuery->with('timetables');
             $lessonProvider->pagination = false;
             $lessons = $lessonProvider->getModels();
+            echo "Debug" . count($lessonProvider->getModels()) . '\n';
+            var_dump($searchLesson);
             $transaction = Attendance::getDb()->beginTransaction();
+
             try {
+
                 foreach ($lessons as $item) {
+
                     foreach ($item->timetables as $timetable) {
                         $attendance = new Attendance();
                         $attendance->student_id = $timetable->student_id;
                         $attendance->lesson_id = $timetable->lesson_id;
                         $attendance->lecturer_id = $timetable->lecturer_id;
                         $attendance->recorded_date = date('Y-m-d', $iterDay);
+
                         if ($attendance->save()) {
                             // $this->stdout("Insert " . $attendance->student_id . ", " . $attendance->lesson_id . ", " . $attendance->recorded_date. "\n", Console::FG_GREEN);
                         } else {

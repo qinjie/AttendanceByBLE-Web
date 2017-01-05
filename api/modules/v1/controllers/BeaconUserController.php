@@ -66,10 +66,13 @@ class BeaconUserController extends CustomActiveController
 
     public function actionGetUser(){
         $request = Yii::$app->getRequest();
-        $major =$request->getBodyParam('major');
-        $minor =$request->getBodyParam('minor');
-        $model = (BeaconUser::find()->where(['major' => $major, 'minor' => $minor])->one());
-         return $model;
+        $major1 =$request->getBodyParam('major1');
+        $minor1 =$request->getBodyParam('minor1');
+        $major2 =$request->getBodyParam('major2');
+        $minor2 =$request->getBodyParam('minor2');
+        $user[] = (BeaconUser::find()->where(['major' => $major1, 'minor' => $minor1])->one());
+        $user[] = (BeaconUser::find()->where(['major' => $major2, 'minor' => $minor2])->one());
+         return $user;
 
 
     }

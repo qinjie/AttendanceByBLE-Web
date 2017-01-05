@@ -69,7 +69,7 @@ class BeaconUserController extends CustomActiveController
         $major =$request->getBodyParam('major');
         $minor =$request->getBodyParam('minor');
         $model = (BeaconUser::find()->where(['major' => $major, 'minor' => $minor])->one());
-         return $model['user_id'];
+         return $model;
 
 
     }

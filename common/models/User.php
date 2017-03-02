@@ -123,7 +123,7 @@ class User extends CustomActiveRecord implements IdentityInterface
     {
         return [
             [['username', 'auth_key', 'password_hash', 'email'], 'required'],
-            [['status', 'role', 'created_at', 'updated_at'], 'integer'],
+//            [['status', 'role', 'created_at', 'updated_at'], 'integer'],
             [['person_id', 'username', 'device_hash', 'password_hash', 'email', 'profileImg', 'name'], 'string', 'max' => 255],
             [['face_id'], 'string', 'max' => 1000],
             [['auth_key'], 'string', 'max' => 32],

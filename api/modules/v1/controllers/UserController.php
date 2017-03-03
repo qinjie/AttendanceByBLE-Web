@@ -172,8 +172,10 @@ class UserController extends CustomActiveController
             $beacon = BeaconUser::find()->where(['user_id' => $user->id])->one();
             $student['major'] = $beacon['major'];
             $student['minor'] = $beacon['minor'];
+            $student['status'] = $user->status;
             return $student;
         } else {
+            throw new BadRequestHttpException('Invalid data');
             if ($model->hasErrors('username'))
                 throw new BadRequestHttpException(null, self::CODE_INCORRECT_USERNAME);
             if ($model->hasErrors('password'))

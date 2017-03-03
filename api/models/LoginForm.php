@@ -44,7 +44,7 @@ class LoginForm extends Model
             ['username', 'filter', 'filter' => 'trim'],
             ['username', 'string', 'min' => 4, 'max' => 255],
             ['password', 'validatePassword'],
-            ['device_hash', 'validateDevice']
+//            ['device_hash', 'validateDevice']
         ];
     }
 

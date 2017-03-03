@@ -173,6 +173,7 @@ class UserController extends CustomActiveController
             $student['major'] = $beacon['major'];
             $student['minor'] = $beacon['minor'];
             $student['status'] = $user->status;
+            $student['device_hash'] = $user->device_hash;
             return $student;
         } else {
             throw new BadRequestHttpException('Invalid data');

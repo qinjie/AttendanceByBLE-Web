@@ -39,7 +39,7 @@ class SiteController extends Controller
                 ],
                 'rules' => [
                     [
-                        'actions' => ['signup', 'login', 'error'],
+                        'actions' => ['signup', 'login', 'error', 'reset-password', 'request-password-reset'],
                         'allow' => true,
                     ],
                     [

@@ -7,6 +7,7 @@ use api\modules\v1\controllers\UserController;
 
 use Yii;
 use yii\base\Model;
+use yii\web\BadRequestHttpException;
 
 /**
  * Login form
@@ -43,7 +44,7 @@ class LoginForm extends Model
             ['username', 'filter', 'filter' => 'trim'],
             ['username', 'string', 'min' => 4, 'max' => 255],
             ['password', 'validatePassword'],
-            ['device_hash', 'validateDevice']
+//            ['device_hash', 'validateDevice']
         ];
     }
 
@@ -81,17 +82,20 @@ class LoginForm extends Model
     {
         if ($this->validate()) {
             $user = $this->getUser();
-            if ($user->status == User::STATUS_WAIT_EMAIL_DEVICE)
-                $this->addError('status', UserController::CODE_UNVERIFIED_EMAIL_DEVICE);
-            else if ($user->status == User::STATUS_WAIT_EMAIL)
-                $this->addError('status', UserController::CODE_UNVERIFIED_EMAIL);
-            else if ($user->status == User::STATUS_WAIT_DEVICE)
-                $this->addError('status', UserController::CODE_UNVERIFIED_DEVICE);
-            else if ($user->status == User::STATUS_ACTIVE) {
-                return $user;
-            } else $this->addError('status', UserController::CODE_INVALID_ACCOUNT);
+            return $user;
+
+//            if ($user->status == User::STATUS_WAIT_EMAIL_DEVICE)
+//                $this->addError('status', UserController::CODE_UNVERIFIED_EMAIL_DEVICE);
+//            else if ($user->status == User::STATUS_WAIT_EMAIL)
+//                $this->addError('status', UserController::CODE_UNVERIFIED_EMAIL);
+////            else if ($user->status == User::STATUS_WAIT_DEVICE)
+////                $this->addError('status', UserController::CODE_UNVERIFIED_DEVICE);
+//            else if ($user->status == User::STATUS_ACTIVE) {
+//                return $user;
+//            } else $this->addError('status', UserController::CODE_INVALID_ACCOUNT);
         }
-        if ($this->hasErrors()) return false;
+        return false;
+//        if ($this->hasErrors()) return false;
     }
 
     /**

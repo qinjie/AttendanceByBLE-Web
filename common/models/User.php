@@ -78,15 +78,15 @@ class User extends CustomActiveRecord implements IdentityInterface
     public function behaviors()
     {
         return [
-            'timestamp' => [
-                'class' => TimestampBehavior::className(),
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at']
-                ],
-                // 'value' => new Expression('NOW()'),
-                'value' => time(),
-            ],
+//            'timestamp' => [
+//                'class' => TimestampBehavior::className(),
+//                'attributes' => [
+//                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+//                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at']
+//                ],
+//                // 'value' => new Expression('NOW()'),
+//                'value' => time(),
+//            ],
         ];
     }
 
@@ -123,7 +123,7 @@ class User extends CustomActiveRecord implements IdentityInterface
     {
         return [
             [['username', 'auth_key', 'password_hash', 'email'], 'required'],
-            [['status', 'role', 'created_at', 'updated_at'], 'integer'],
+//            [['status', 'role', 'created_at', 'updated_at'], 'integer'],
             [['person_id', 'username', 'device_hash', 'password_hash', 'email', 'profileImg', 'name'], 'string', 'max' => 255],
             [['face_id'], 'string', 'max' => 1000],
             [['auth_key'], 'string', 'max' => 32],
@@ -194,7 +194,8 @@ class User extends CustomActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+//        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['id' => $id]);
     }
 
     /**

@@ -87,6 +87,7 @@ class TimetableController extends CustomActiveController
 //        $data = Timetable::find()->where(['student_id' => $student_id, 'lesson.ldate' => $date])->all();
         $searchModel = new \common\models\TimetableSearch();
         $dataProvider = $searchModel->searchNow(Yii::$app->request->queryParams, $time, $date);
-        return $dataProvider;
+        return $dataProvider->getModels()[0];
+
     }
 }

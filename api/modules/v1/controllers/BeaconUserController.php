@@ -5,7 +5,10 @@
  * Date: 4/1/17
  * Time: 10:36 AM
  */
+
 namespace api\modules\v1\controllers;
+
+
 use api\common\models\BeaconUser;
 use api\components\CustomActiveController;
 use common\components\AccessRule;
@@ -16,16 +19,19 @@ use yii\web\UnauthorizedHttpException;
 use  yii\db\Query;
 use  yii\web\Request;
 use Yii;
+
 class BeaconUserController extends CustomActiveController
 {
     public $modelClass = 'api\common\models\BeaconUser';
     public function behaviors()
     {
         $behaviors = parent::behaviors();
+
         $behaviors['authenticator'] = [
             'class' => HttpBearerAuth::className(),
             'except' => [],
         ];
+
         $behaviors['access'] = [
             'class' => AccessControl::className(),
             'ruleConfig' => [
@@ -47,13 +53,17 @@ class BeaconUserController extends CustomActiveController
                 throw new UnauthorizedHttpException('You are not authorized');
             },
         ];
+
         $behaviors['verbs'] = [
             'class' => VerbFilter::className(),
             'actions' => [
             ],
         ];
+
         return $behaviors;
     }
+
+
     public function actionGetUser(){
         $request = Yii::$app->getRequest();
         $major1 =$request->getBodyParam('major1');
@@ -63,5 +73,9 @@ class BeaconUserController extends CustomActiveController
         $user[] = (BeaconUser::find()->where(['major' => $major1, 'minor' => $minor1])->one());
         $user[] = (BeaconUser::find()->where(['major' => $major2, 'minor' => $minor2])->one());
         return $user;
+
+
     }
+
+
 }

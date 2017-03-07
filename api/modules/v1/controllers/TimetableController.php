@@ -79,7 +79,7 @@ class TimetableController extends CustomActiveController
     public function actionTime(){
         $request = Yii::$app->request;
         $bodyParams = $request->bodyParams;
-        $student_id =  $bodyParams['student_id'];
+//        $student_id =  $bodyParams['student_id'];
         $datetime =  $bodyParams['datetime'];
         $datetime = strtotime($datetime);
         $date = date('Y-m-d', $datetime);
@@ -87,6 +87,7 @@ class TimetableController extends CustomActiveController
 //        $data = Timetable::find()->where(['student_id' => $student_id, 'lesson.ldate' => $date])->all();
         $searchModel = new \common\models\TimetableSearch();
         $dataProvider = $searchModel->searchNow(Yii::$app->request->queryParams, $time, $date);
+//        if (empty($dataProvider->getModels())) return null;
         return $dataProvider->getModels()[0];
 
     }

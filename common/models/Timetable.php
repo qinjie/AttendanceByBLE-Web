@@ -95,6 +95,11 @@ class Timetable extends \yii\db\ActiveRecord
             ->viaTable('lesson', ['id' => 'lesson_id']);
     }
 
+    public function getBeaconLesson(){
+        return $this->hasOne(BeaconLesson::className(), ['lesson_id' => 'lesson_id']);
+
+    }
+
     public function fields()
     {
         $fields = parent::fields();
@@ -102,6 +107,7 @@ class Timetable extends \yii\db\ActiveRecord
         $fields[] = 'lesson_date';
         $fields[] = 'venue';
         $fields[] = 'lecturers';
+        $fields[] = 'beaconLesson';
 //        unset($fields['created_at']);
 //        unset($fields['updated_at']);
 //        unset($fields['lesson_id']);

@@ -90,4 +90,16 @@ class TimetableController extends CustomActiveController
         return $dataProvider->getModels()[0];
 
     }
+
+    public function actionGetStudent(){
+        $request = Yii::$app->request;
+        $bodyParams = $request->bodyParams;
+        $lesson_id =  $bodyParams['lesson_id'];
+        $data = Timetable::find()->where(['lesson_id' => $lesson_id])->all();
+        $listStudent = [];
+        foreach ($data as $item){
+            $listStudent[] =  $item->student;
+        }
+        return $listStudent;
+    }
 }

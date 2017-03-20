@@ -67,6 +67,7 @@ class BeaconAttendanceStudentController extends CustomActiveController
 
     public function actionStudentList(){
         $params = Yii::$app->request->post();
+        $params = $params['data'];
         $student_id = $params[0]['student_id_1'];
         $lesson_date_id = $params[0]['lesson_date_id'];
         try {

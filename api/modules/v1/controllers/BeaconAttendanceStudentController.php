@@ -71,7 +71,7 @@ class BeaconAttendanceStudentController extends CustomActiveController
         $student_id = $params[0]['student_id_1'];
         $lesson_date_id = $params[0]['lesson_date_id'];
         try {
-            Yii::$app->db->createCommand()->batchInsert(BeaconAttendanceStudent::tableName(), ['lesson_date_id', 'student_id_1', 'student_id_2', 'status'], $params)->execute();
+            Yii::$app->db->createCommand()->batchInsert(BeaconAttendanceStudent::tableName(), ['lesson_date_id','status','student_id_1', 'student_id_2'], $params)->execute();
         } catch (Exception $ex){
             throw new BadRequestHttpException("Database Error", 1);
         }

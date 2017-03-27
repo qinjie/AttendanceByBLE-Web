@@ -117,7 +117,7 @@ class TimetableController extends CustomActiveController
             foreach ($data as $item){
                 $listStudent[] =  $item->student;
             }
-            $listTimeTable[] = array("" . $lesson->lesson_id . "" => $listStudent);
+            $listTimeTable[] = array("lesson_id" => $lesson->lesson_id,"students" => $listStudent);
         }
         return $listTimeTable;
 

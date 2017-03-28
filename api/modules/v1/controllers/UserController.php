@@ -261,7 +261,7 @@ class UserController extends CustomActiveController
     public function actionRegisterDevice() {
         $model = new RegisterDeviceForm();
         if ($model->load(Yii::$app->request->post(), '') && $user = $model->registerDevice()) {
-            UserToken::deleteAll(['user_id' => $user->id, 'action' => TokenHelper::TOKEN_ACTION_ACCESS]);
+//            UserToken::deleteAll(['user_id' => $user->id, 'action' => TokenHelper::TOKEN_ACTION_ACCESS]);
             return 'register device successfully';
         } else {
             if ($model->hasErrors('username'))

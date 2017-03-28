@@ -136,8 +136,9 @@ class BeaconAttendanceStudentController extends CustomActiveController
             $student_status = $status;
             $student = Student::findOne(['id'=>$student_id_1]);
             if (empty($student)) return "Student not found";
-            $user = User::findOne(['id' => $student->user_id]);
-            if (empty($user)) return "User not found";
+            $user = Yii::$app->getUser()->identity;
+//            if (empty($user)) return "User not found";
+//            return $user->status;
             if ($user->status != User::STATUS_ACTIVE) return "Waiting for active device";
             $data1 = BeaconAttendanceStudent::find()->where(['lesson_date_id' => $lesson_date_id, 'student_id_1' => $student_id_1, 'student_id_2' => $student_id_2])->all();
             if (empty($data1)) {

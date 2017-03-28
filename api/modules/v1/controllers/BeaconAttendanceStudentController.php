@@ -81,7 +81,7 @@ class BeaconAttendanceStudentController extends CustomActiveController
         $count = BeaconAttendanceStudent::find()->where(['lesson_date_id' => $lesson_date_id, 'student_id_1' => $student_id])->count();
         $lecturer = BeaconAttendanceLecturer::find()->where(['lesson_date_id' => $lesson_date_id, 'student_id' => $student_id])->one();
         $lecturer_id = $lecturer['lecturer_id'];
-        if ($count > 1 && $lecturer_id){
+        if ($count > 1){
 
             $result2 = Yii::$app->db->createCommand()
                 ->insert('attendance', ['student_id' => $student_id, 'lesson_date_id' => $lesson_date_id, 'recorded_time' => date('H:i:s'), 'lecturer_id' => $lecturer_id, 'status' => 0])->execute();

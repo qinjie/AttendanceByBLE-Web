@@ -124,4 +124,8 @@ class TimetableController extends CustomActiveController
         return $listStudent;
 
     }
+
+    public function actionIndex(){
+
+    }
 }

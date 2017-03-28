@@ -100,6 +100,15 @@ class Timetable extends \yii\db\ActiveRecord
 
     }
 
+    public function getStudents(){
+        $timetable = Timetable::find()->where(['lesson_id' => $this->lesson_id])->all();
+        $listStudent = [];
+        foreach ($timetable as $item){
+            $listStudent[] =  $item->student;
+        }
+        return $listStudent;
+    }
+
     public function fields()
     {
         $fields = parent::fields();
@@ -108,6 +117,7 @@ class Timetable extends \yii\db\ActiveRecord
         $fields[] = 'venue';
         $fields[] = 'lecturers';
         $fields[] = 'beaconLesson';
+        $fields[] = 'students';
 //        unset($fields['created_at']);
 //        unset($fields['updated_at']);
 //        unset($fields['lesson_id']);

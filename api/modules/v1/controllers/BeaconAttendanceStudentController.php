@@ -11,8 +11,11 @@ namespace api\modules\v1\controllers;
 use api\common\models\Lecturer;
 use api\components\CustomActiveController;
 use common\components\AccessRule;
+use common\models\Attendance;
 use common\models\BeaconAttendanceLecturer;
 use common\models\BeaconAttendanceStudent;
+use common\models\Student;
+use common\models\User;
 use yii\base\Exception;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -114,6 +117,60 @@ class BeaconAttendanceStudentController extends CustomActiveController
 //                return "Wating for student verification";
 //            }
 //        }
+    }
+
+    public function actionStudentAttendance(){
+        $params = Yii::$app->request->post();
+        $params = $params['data'];
+        $student_id = 0;
+        $student_status = 0;
+        $lesson_date = 0;
+        $a = [];
+        foreach ($params as $value){
+            $lesson_date_id = $value['lesson_date_id'];
+            $student_id_1 = $value['student_id_1'];
+            $student_id_2 = $value['student_id_2'];
+            $status = $value['status'];
+            $student_id = $student_id_1;
+            $lesson_date = $lesson_date_id;
+            $student_status = $status;
+            $student = Student::findOne(['id'=>$student_id_1]);
+            if (empty($student)) return "Student not found";
+            $user = User::findOne(['id' => $student->user_id]);
+            if (empty($user)) return "User not found";
+            if ($user->status != User::STATUS_ACTIVE) return "Waiting for active device";
+            $data1 = BeaconAttendanceStudent::find()->where(['lesson_date_id' => $lesson_date_id, 'student_id_1' => $student_id_1, 'student_id_2' => $student_id_2])->all();
+            if (empty($data1)) {
+                $attendance = new BeaconAttendanceStudent();
+                $attendance->lesson_date_id = $lesson_date_id;
+                $attendance->student_id_1 = $student_id_1;
+                $attendance->student_id_2 = $student_id_2;
+                $attendance->status = $status;
+                $attendance->save();
+//                $a[] = $attendance;
+            }
+            $att = Attendance::find()->where(['student_id' => $student_id_2, 'lesson_date_id' => $lesson_date_id])->all();
+            if (empty($atte)){
+                $tmp = new Attendance();
+                $tmp->lesson_date_id = $lesson_date_id;
+                $tmp->student_id = $student_id_2;
+                $tmp->recorded_time = date('H:i:s');
+                $tmp->status = $status;
+                $tmp->save();
+            }
+
+        }
+//        RETURN $a;
+        $attendance = Attendance::find()->where(['student_id' => $student_id, 'lesson_date_id' => $lesson_date])->all();
+        if (empty($attendance)){
+            $tmp = new Attendance();
+            $tmp->lesson_date_id = $lesson_date;
+            $tmp->student_id = $student_id;
+            $tmp->recorded_time = date('H:i:s');
+            $tmp->status = $student_status;
+            $tmp->save();
+        }
+        return "Attendance taking successfully";
     }
 
 

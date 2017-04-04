@@ -35,11 +35,32 @@ AppAsset::register($this);
         ],
     ]);
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
+
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
+        $menuItems = [
+            [
+                'label' => 'Home', 'url' => ['/site/index']
+            ],
+//            [
+////                'label' => 'Semester', 'url' => ['/site/index']
+//            ],
+            [
+                'label' => 'Semester',
+
+                'items' => [
+                    ['label' => 'Semester infos',
+                        'url' => ['/semester-info/index'],
+                    ],
+                    ['label' => 'Semester dates',
+                        'url' => ['/semester-date/index'],
+                    ],
+                ],
+
+            ],
+        ];
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(

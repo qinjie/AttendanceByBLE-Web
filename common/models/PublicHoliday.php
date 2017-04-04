@@ -46,7 +46,7 @@ class PublicHoliday extends \yii\db\ActiveRecord
             'id' => 'ID',
             'year' => 'Year',
             'name' => 'Name',
-            'hdate' => 'Hdate',
+            'hdate' => 'Public holiday date',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

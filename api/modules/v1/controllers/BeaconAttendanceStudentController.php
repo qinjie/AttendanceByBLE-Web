@@ -9,6 +9,9 @@
 namespace api\modules\v1\controllers;
 
 use api\common\models\Lecturer;
+use api\common\models\Lesson;
+use api\common\models\LessonDate;
+use api\common\models\Timetable;
 use api\components\CustomActiveController;
 use common\components\AccessRule;
 use common\models\Attendance;
@@ -130,15 +133,18 @@ class BeaconAttendanceStudentController extends CustomActiveController
             $lesson_date_id = $value['lesson_date_id'];
             $student_id_1 = $value['student_id_1'];
             $student_id_2 = $value['student_id_2'];
-            $status = $value['status'];
+            $status = $this->getStatus($lesson_date_id);
             $student_id = $student_id_1;
             $lesson_date = $lesson_date_id;
+            $l_date = LessonDate::findOne($lesson_date_id);
+//            $lesson = Lesson::findOne($l_date->lesson_id);
+//            return $status;
+            if (!$this->checkTimetable($lesson_date_id, $student_id)) return "Cannot take attendance for this lesson";
+            if (!$this->checkDate($lesson_date_id)) return "Cannot take attendance for today";
             $student_status = $status;
             $student = Student::findOne(['id'=>$student_id_1]);
             if (empty($student)) return "Student not found";
             $user = Yii::$app->getUser()->identity;
-//            if (empty($user)) return "User not found";
-//            return $user->status;
             if ($user->status != User::STATUS_ACTIVE) return "Waiting for active device";
             $data1 = BeaconAttendanceStudent::find()->where(['lesson_date_id' => $lesson_date_id, 'student_id_1' => $student_id_1, 'student_id_2' => $student_id_2])->all();
             if (empty($data1)) {
@@ -172,6 +178,32 @@ class BeaconAttendanceStudentController extends CustomActiveController
             $tmp->save();
         }
         return "Attendance taking successfully";
+    }
+
+    public function checkTimetable($lesson_date_id, $student_id){
+        $lesson_date = LessonDate::findOne($lesson_date_id);
+        $lesson_id = $lesson_date->lesson_id;
+        $timetable = Timetable::find()->where(['lesson_id' => $lesson_id, 'student_id' => $student_id])->all();
+        return (!empty($timetable));
+    }
+
+    public function checkDate($lesson_date_id){
+        $lesson_date = LessonDate::findOne($lesson_date_id)->ldate;
+        $current_date = date("Y-m-d");
+        return ($current_date == $lesson_date);
+
+    }
+
+    public function getStatus($lesson_date_id){
+        $lesson_date = LessonDate::findOne($lesson_date_id);
+        $lesson = Lesson::findOne($lesson_date->lesson_id);
+        $start_time = $lesson->start_time;
+        $end_time = $lesson->end_time;
+        $current_time = date("H:i:s");
+//        return $current_time;
+        $interval = (strtotime($current_time)-strtotime($start_time));
+        if ($interval >= 0 && $interval <= Yii::$app->params['ATTENDANCE_INTERVAL']) return 0;
+        return $interval-Yii::$app->params['ATTENDANCE_INTERVAL'];
     }
 
 

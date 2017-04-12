@@ -141,6 +141,7 @@ class BeaconAttendanceStudentController extends CustomActiveController
 //            return $status;
             if (!$this->checkTimetable($lesson_date_id, $student_id)) return "Cannot take attendance for this lesson";
             if (!$this->checkDate($lesson_date_id)) return "Cannot take attendance for today";
+            if ($status < 0) return "Cannot take attendance for this time";
             $student_status = $status;
             $student = Student::findOne(['id'=>$student_id_1]);
             if (empty($student)) return "Student not found";

@@ -178,6 +178,7 @@ class BeaconAttendanceStudentController extends CustomActiveController
             $tmp->status = $student_status;
             $tmp->save();
         }
+        if ($student_status > 0) return ("Late: ". $student_status . " seconds");
         return "Attendance taking successfully";
     }
 

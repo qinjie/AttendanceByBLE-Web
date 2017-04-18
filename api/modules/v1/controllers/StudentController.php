@@ -83,10 +83,12 @@ class StudentController extends CustomActiveController
             $total = LessonDate::find()->where(['lesson_id' => $item['lesson_id']])->count();
             $presented = Attendance::find()->joinWith('lesson_date')->where(['attendance.student_id' => $student['id'], 'lesson_date.lesson_id' => $item['lesson_id'], 'attendance.status' => 0])->count();
             $absented = Attendance::find()->joinWith('lesson_date')->where(['attendance.student_id' => $student['id'], 'lesson_date.lesson_id' => $item['lesson_id'], 'attendance.status' => -1])->count();
+            $late = Attendance::find()->joinWith('lesson_date')->where(['attendance.student_id' => $student['id'], 'lesson_date.lesson_id' => $item['lesson_id']])->andWhere(['>', 'attendance.status',0 ])->count();
             $list[$count]['lesson_name'] = $lesson_name;
             $list[$count]['total'] = $total;
             $list[$count]['presented'] = $presented;
             $list[$count]['absented'] = $absented;
+            $list[$count]['late'] = $late;
         }
         $count = -1;
         $result = [];
@@ -103,17 +105,20 @@ class StudentController extends CustomActiveController
                 $total = 0;
                 $absented = 0;
                 $presented = 0;
+                $late = 0;
                 for ($h = $i; $h < count($list); $h++){
                     if ($list[$h]['lesson_name'] == $name){
                         $total += $list[$h]['total'];
                         $absented += $list[$h]['absented'];
                         $presented += $list[$h]['presented'];
+                        $late += $list[$h]['late'];
                     }
                 }
                 $result[$count]['lesson_name'] = $name;
                 $result[$count]['total'] = $total;
                 $result[$count]['absented'] = $absented;
                 $result[$count]['presented'] = $presented;
+                $result[$count]['late'] = $late;
             }
         }
         return $result;

@@ -201,6 +201,7 @@ class BeaconAttendanceStudentController extends CustomActiveController
         $start_time = $lesson->start_time;
         $end_time = $lesson->end_time;
         $current_time = date("H:i:s");
+        if($current_time > $end_time) return -1;
 //        return $current_time;
         $interval = (strtotime($current_time)-strtotime($start_time));
         if ($interval >= 0 && $interval <= Yii::$app->params['ATTENDANCE_INTERVAL']) return 0;

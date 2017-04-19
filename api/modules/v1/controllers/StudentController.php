@@ -87,8 +87,8 @@ class StudentController extends CustomActiveController
             $list[$count]['lesson_name'] = $lesson_name;
             $list[$count]['total'] = $total;
             $list[$count]['presented'] = $presented;
-            $list[$count]['absented'] = $absented;
-            $list[$count]['late'] = $late;
+            $list[$count]['absented'] = $absented + $late;
+//            $list[$count]['late'] = $late;
         }
         $count = -1;
         $result = [];
@@ -111,14 +111,14 @@ class StudentController extends CustomActiveController
                         $total += $list[$h]['total'];
                         $absented += $list[$h]['absented'];
                         $presented += $list[$h]['presented'];
-                        $late += $list[$h]['late'];
+//                        $late += $list[$h]['late'];
                     }
                 }
                 $result[$count]['lesson_name'] = $name;
                 $result[$count]['total'] = $total;
                 $result[$count]['absented'] = $absented;
                 $result[$count]['presented'] = $presented;
-                $result[$count]['late'] = $late;
+//                $result[$count]['late'] = $late;
             }
         }
         return $result;

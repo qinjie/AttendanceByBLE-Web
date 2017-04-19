@@ -10,9 +10,9 @@
 </div>
 
 <?php
-//$begin = new DateTime('2016-09-05');
-//$end = new DateTime('2016-12-30');
-//$beforeDate = new DateTime('2016-09-04');
+//$begin = new DateTime('2017-05-01');
+//$end = new DateTime('2016-08-31');
+//$beforeDate = new DateTime('2016-08-31');
 //
 //$interval = DateInterval::createFromDateString('1 day');
 //$period = new DatePeriod($begin, $interval, $end);
@@ -33,14 +33,14 @@
 //        $is_holiday = true;
 //    }
 //    $cmd = Yii::$app->db
-//        ->createCommand("insert into semester_date(semester_id, tdate, week_num, weekday, is_holiday) values (1, :tdate, :weeknum, :weekday, :is_holiday)");
+//        ->createCommand("insert into semester_date(semester_id, tdate, week_num, weekday, is_holiday) values (3, :tdate, :weeknum, :weekday, :is_holiday)");
 //    $cmd->bindValue(':tdate', $tdate);
 //    $cmd->bindValue(':weeknum', $weeknum);
 //    $cmd->bindValue(':weekday', $weekday);
 //    $cmd->bindValue(':is_holiday', $is_holiday);
 //    $result = $cmd->query();
 //}
-//
+
 //$cmd = Yii::$app->db
 //    ->createCommand("select tdate, week_num, weekday from semester_date where is_holiday = 0");
 //$result = $cmd->queryAll();

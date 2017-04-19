@@ -6,7 +6,7 @@ import datetime
 _host = 'localhost'
 _user = 'root'
 _password = 'abcd1234'
-_database = 'atk-ble2'#'wired-noticeboard'
+_database = 'atk_ble2'#'wired-noticeboard'
 
 def get_lesson_id_at_date(cursor, ldate) :
     sql = "SELECT lesson_date.lesson_id, lesson_date.id " \

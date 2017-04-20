@@ -57,10 +57,10 @@ if __name__ == '__main__' :
     yesterday = datetime.datetime.now().date() - datetime.timedelta(days = 1)
     for a in list_semester :
         start_date = a[0]
-        end_date = datetime.datetime.now().date() - datetime.timedelta(days=1)
+        end_date_ = datetime.datetime.now().date() - datetime.timedelta(days=1)
 
         if (start_date < yesterday) & (yesterday < end_date) :
-            while(start_date < end_date) :
+            while(start_date < end_date_) :
                 list_lesson_id = get_lesson_id_at_date(cursor, start_date)
                 start_date  = start_date + datetime.timedelta(days=1)
                 tmp = get_attendance(cursor)

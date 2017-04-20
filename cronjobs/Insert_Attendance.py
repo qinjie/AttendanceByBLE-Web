@@ -57,7 +57,7 @@ if __name__ == '__main__' :
     yesterday = datetime.datetime.now().date() - datetime.timedelta(days = 1)
     for a in list_semester :
         start_date = a[0]
-        end_date = a[1]
+        end_date = datetime.datetime.now().date() - datetime.timedelta(days=1)
 
         if (start_date < yesterday) & (yesterday < end_date) :
             while(start_date < end_date) :

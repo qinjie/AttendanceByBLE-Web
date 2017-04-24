@@ -135,11 +135,11 @@ class TimetableController extends CustomActiveController
             throw new HttpException(400, 'Missing <lesson_date_id> attribute in header.');
         $lesson_date_id = $bodyParams['lesson_date_id'];
         $attendance = Attendance::findOne(['student_id' => $student->id, 'lesson_date_id' => $lesson_date_id]);
-        
+
         if (empty($attendance)){
             return "Not yet";
         }
-        return $attendance;
+        return $attendance->status;
 
     }
 }

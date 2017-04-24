@@ -10,59 +10,59 @@
 </div>
 
 <?php
-//$begin = new DateTime('2017-05-01');
-//$end = new DateTime('2016-08-31');
-//$beforeDate = new DateTime('2016-08-31');
-//
-//$interval = DateInterval::createFromDateString('1 day');
-//$period = new DatePeriod($begin, $interval, $end);
-//foreach ( $period as $dt ){
-//    $today = $dt;//->format( "Y-m-d" );
-//    $tdate = $dt->format( "Y-m-d" );
-//    $interval = $beforeDate->diff($today);
-//    $day = $interval->format('%a');
-//    $weeknum = ceil($day/7);
-//    $weekday = $day%7 + 1;
-//    if ($weekday == 1) $weekday = 8;
-//    $is_holiday = false;
-//    $cmd = Yii::$app->db
-//        ->createCommand("select hdate from  public_holiday where hdate = :tdate");
-//    $cmd->bindValue(':tdate', $tdate);
-//    $result = $cmd->query();
-//    if (count($result) > 0){
-//        $is_holiday = true;
-//    }
-//    $cmd = Yii::$app->db
-//        ->createCommand("insert into semester_date(semester_id, tdate, week_num, weekday, is_holiday) values (3, :tdate, :weeknum, :weekday, :is_holiday)");
-//    $cmd->bindValue(':tdate', $tdate);
-//    $cmd->bindValue(':weeknum', $weeknum);
-//    $cmd->bindValue(':weekday', $weekday);
-//    $cmd->bindValue(':is_holiday', $is_holiday);
-//    $result = $cmd->query();
-//}
+$begin = new DateTime('2017-01-02');
+$end = new DateTime('2016-08-31');
+$beforeDate = new DateTime('2016-08-31');
 
-//$cmd = Yii::$app->db
-//    ->createCommand("select tdate, week_num, weekday from semester_date where is_holiday = 0");
-//$result = $cmd->queryAll();
-//foreach ($result as $td){
-//    $ldate = $td['tdate'];
-//    $week_num = $td['week_num'];
-//    $weekday = $td['weekday'];
-//
-//    $cmd = Yii::$app->db
-//        ->createCommand("select id from lesson where weekday = :weekday");
-//    $cmd->bindValue(':weekday', $weekday);
-//    $lesson = $cmd->queryAll();
-//
-//    foreach ($lesson as $ls){
-//        $lesson_id = $ls['id'];
-//        $cmd = Yii::$app->db
-//            ->createCommand("insert into lesson_date(lesson_id, ldate, updated_by) values (:lession_id, :ldate, 1)");
-//        $cmd->bindValue(':lession_id', $lesson_id);
-//        $cmd->bindValue(':ldate', $ldate);
-//        $result = $cmd->query();
-//    }
-//}
+$interval = DateInterval::createFromDateString('1 day');
+$period = new DatePeriod($begin, $interval, $end);
+foreach ( $period as $dt ){
+    $today = $dt;//->format( "Y-m-d" );
+    $tdate = $dt->format( "Y-m-d" );
+    $interval = $beforeDate->diff($today);
+    $day = $interval->format('%a');
+    $weeknum = ceil($day/7);
+    $weekday = $day%7 + 1;
+    if ($weekday == 1) $weekday = 8;
+    $is_holiday = false;
+    $cmd = Yii::$app->db
+        ->createCommand("select hdate from  public_holiday where hdate = :tdate");
+    $cmd->bindValue(':tdate', $tdate);
+    $result = $cmd->query();
+    if (count($result) > 0){
+        $is_holiday = true;
+    }
+    $cmd = Yii::$app->db
+        ->createCommand("insert into semester_date(semester_id, tdate, week_num, weekday, is_holiday) values (3, :tdate, :weeknum, :weekday, :is_holiday)");
+    $cmd->bindValue(':tdate', $tdate);
+    $cmd->bindValue(':weeknum', $weeknum);
+    $cmd->bindValue(':weekday', $weekday);
+    $cmd->bindValue(':is_holiday', $is_holiday);
+    $result = $cmd->query();
+}
+
+$cmd = Yii::$app->db
+    ->createCommand("select tdate, week_num, weekday from semester_date where is_holiday = 0");
+$result = $cmd->queryAll();
+foreach ($result as $td){
+    $ldate = $td['tdate'];
+    $week_num = $td['week_num'];
+    $weekday = $td['weekday'];
+
+    $cmd = Yii::$app->db
+        ->createCommand("select id from lesson where weekday = :weekday");
+    $cmd->bindValue(':weekday', $weekday);
+    $lesson = $cmd->queryAll();
+
+    foreach ($lesson as $ls){
+        $lesson_id = $ls['id'];
+        $cmd = Yii::$app->db
+            ->createCommand("insert into lesson_date(lesson_id, ldate, updated_by) values (:lession_id, :ldate, 1)");
+        $cmd->bindValue(':lession_id', $lesson_id);
+        $cmd->bindValue(':ldate', $ldate);
+        $result = $cmd->query();
+    }
+}
 ?>
 
 <?php

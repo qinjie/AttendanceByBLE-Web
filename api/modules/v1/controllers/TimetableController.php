@@ -8,6 +8,7 @@
 
 namespace api\modules\v1\controllers;
 
+use api\common\models\Attendance;
 use api\common\models\Student;
 use api\common\models\Timetable;
 use api\components\CustomActiveController;
@@ -16,6 +17,7 @@ use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\VerbFilter;
+use yii\web\HttpException;
 use yii\web\UnauthorizedHttpException;
 use Yii;
 
@@ -125,7 +127,19 @@ class TimetableController extends CustomActiveController
 
     }
 
-    public function actionIndex(){
+    public function actionGetStatus(){
+        $student = Student::find()->where(['user_id' => Yii::$app->user->id])->one();
+        $request = Yii::$app->request;
+        $bodyParams = $request->bodyParams;
+        if (!isset($bodyParams['lesson_date_id']))
+            throw new HttpException(400, 'Missing <lesson_date_id> attribute in header.');
+        $lesson_date_id = $bodyParams['lesson_date_id'];
+        $attendance = Attendance::findOne(['student_id' => $student->id, 'lesson_date_id' => $lesson_date_id]);
+        
+        if (empty($attendance)){
+            return "Not yet";
+        }
+        return $attendance;
 
     }
 }

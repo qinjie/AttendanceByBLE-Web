@@ -16,6 +16,7 @@ use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
 use yii\web\UnauthorizedHttpException;
 use Yii;
 
@@ -75,5 +76,31 @@ class AttendanceController extends CustomActiveController
         $dataProvider = $searchModel->searchRest(Yii::$app->request->queryParams);
         $query = $dataProvider->query;
         return $dataProvider;
+    }
+
+    public function actionListAttendanceStatusByLecturer()
+    {
+        $request = Yii::$app->request;
+        $bodyParams = $request->bodyParams;
+        $lesson_date_id =  $bodyParams['lesson_date_id'];
+        $searchModel = new \common\models\AttendanceSearch();
+        $dataProvider = $searchModel->searchByLecturer($lesson_date_id);
+        return $dataProvider;
+    }
+
+    public function actionUpdateStatus()
+    {
+        $request = Yii::$app->request;
+        $bodyParams = $request->bodyParams;
+        $lesson_date_id =  $bodyParams['lesson_date_id'];
+        $student_id = $bodyParams['student_id'];
+        $seachStudent = new \common\models\StudentSearch();
+        $student_name = $seachStudent->searchName($student_id);
+        $status = $bodyParams['status'];
+        $result = Yii::$app->db->createCommand()->update('attendance', ['status' => $status], 'lesson_date_id ='.$lesson_date_id.' and student_id='.$student_id)->execute();
+        if ($result == 1)
+            return 'Update attendance status of Student '.$student_name.' to '.$status.' successful.';
+        else
+            return 'Update attendance status of Student '.$student_name.' to '.$status.' failed.';
     }
 }

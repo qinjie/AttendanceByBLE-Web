@@ -157,7 +157,7 @@ class BeaconAttendanceStudentController extends CustomActiveController
                 $attendance->save();
 //                $a[] = $attendance;
             }
-            $att = Attendance::find()->where(['student_id' => $student_id_2, 'lesson_date_id' => $lesson_date_id])->all();
+            $atte = Attendance::find()->where(['student_id' => $student_id_2, 'lesson_date_id' => $lesson_date_id])->all();
             if (empty($atte)){
                 $tmp = new Attendance();
                 $tmp->lesson_date_id = $lesson_date_id;

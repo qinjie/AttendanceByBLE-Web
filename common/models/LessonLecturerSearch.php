@@ -75,6 +75,7 @@ class LessonLecturerSearch extends LessonLecturer
         if ($lecturer){
             $query = LessonLecturer::find()->where(['lecturer_id' => $lecturer['id']]);
             $query->join('LEFT JOIN', 'lesson', 'lesson.id = lesson_lecturer.lesson_id');
+            $query->join('LEFT JOIN', 'beacon_lesson','lesson.id = beacon_lesson.lesson_id');
             $query->join('LEFT JOIN', 'lesson_date', 'lesson_date.lesson_id = lesson.id')->orderBy('lesson_date.ldate, lesson.start_time ASC');
             if ($today){
                 $query->andWhere('lesson_date.ldate = \''.date('Y-m-d').'\'');

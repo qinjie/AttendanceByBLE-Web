@@ -48,6 +48,7 @@ class Attendance extends \yii\db\ActiveRecord
             [['student_id'], 'exist', 'skipOnError' => true, 'targetClass' => Student::className(), 'targetAttribute' => ['student_id' => 'id']],
             [['lecturer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Lecturer::className(), 'targetAttribute' => ['lecturer_id' => 'id']],
             [['lesson_date_id'], 'exist', 'skipOnError' => true, 'targetClass' => LessonDate::className(), 'targetAttribute' => ['lesson_date_id' => 'id']],
+
         ];
     }
 
@@ -92,11 +93,22 @@ class Attendance extends \yii\db\ActiveRecord
         return $this->hasOne(LessonDate::className(), ['id' => 'lesson_date_id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLesson()
+    {
+        return $this->hasOne(Lesson::className(), ['id' => 'lesson_id'])
+                    ->viaTable('lesson_date', ['id' => 'lesson_date_id']);
+    }
+
+
     public function fields()
     {
         $fields = parent::fields();
         $fields[] = 'lesson_date';
         $fields[] = 'lecturer';
+        $fields[] = 'lesson';
         return $fields;
     }
 

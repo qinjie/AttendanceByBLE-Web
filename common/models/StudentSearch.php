@@ -7,6 +7,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Student;
+use yii\db\Query;
 
 /**
  * StudentSearch represents the model behind the search form about `common\models\Student`.
@@ -109,5 +110,18 @@ class StudentSearch extends Student
             ->andFilterWhere(['like', 'acad', $this->acad]);
 
         return $dataProvider;
+    }
+
+    public function searchName($id)
+    {
+        $query = (new Query())->select('name')
+            ->from('student')
+            ->where('student.id = ' . $id);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+        foreach ($dataProvider->getModels() as $myModel) {
+            return $name = $myModel['name'];
+        }
     }
 }

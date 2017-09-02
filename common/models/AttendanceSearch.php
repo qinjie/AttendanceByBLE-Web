@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Attendance;
+use yii\db\Query;
 
 /**
  * AttendanceSearch represents the model behind the search form about `common\models\Attendance`.
@@ -78,7 +79,15 @@ class AttendanceSearch extends Attendance
         $query = Attendance::find()->where(['student_id' => $student_id]);
         $query->joinWith('lecturer');
         $query->join('LEFT JOIN', 'lesson_date', 'lesson_date.id = attendance.lesson_date_id');
-        $query->join('LEFT JOIN', 'lesson', 'lesson_date.lesson_id = lesson.id')->orderBy('lesson_date.ldate, lesson.start_time ASC');
+        $query->join('LEFT JOIN', 'lesson', 'lesson_date.lesson_id = lesson.id')
+            ->orderBy(' lesson_date.ldate DESC, lesson.start_time ASC');
+
+//        $query = (new Query())->select('*')
+//                ->from('attendance')->join('LEFT JOIN','lecturer','attendance.lecturer_id = lecturer.id')
+//                ->join('LEFT JOIN', 'lesson_date', 'lesson_date.id = attendance.lesson_date_id')
+//                ->join('LEFT JOIN', 'lesson', 'lesson_date.lesson_id = lesson.id')
+//                ->where(['attendance.student_id' => $student_id])
+//                ->orderBy(' lesson_date.ldate DESC, lesson.start_time ASC');
 
         // add conditions that should always apply here
 
@@ -108,4 +117,21 @@ class AttendanceSearch extends Attendance
 
         return $dataProvider;
     }
+
+    public function searchByLecturer($lesson_date_id)
+    {
+        $lecturer_id = Lecturer::find()->select('id')->where(['user_id' => Yii::$app->user->id]);
+        $query = Attendance::find()->where(['lecturer_id' => $lecturer_id]);
+        $query->joinWith('student');
+        $query->join('LEFT JOIN', 'lesson_date', 'lesson_date.id = attendance.lesson_date_id')
+            ->where('lesson_date.id = '.$lesson_date_id)
+            ->orderBy(' student.id DESC');
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+        return $dataProvider;
+    }
+
+    
 }

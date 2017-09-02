@@ -87,7 +87,7 @@ class StudentController extends CustomActiveController
             $list[$count]['lesson_name'] = $lesson_name;
             $list[$count]['total'] = $total;
             $list[$count]['presented'] = $presented;
-            $list[$count]['absented'] = $absented + $late;
+            $list[$count]['absented'] = $absented;
             $list[$count]['late'] = $late;
         }
         $count = -1;

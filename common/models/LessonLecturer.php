@@ -81,6 +81,15 @@ class LessonLecturer extends \yii\db\ActiveRecord
             ->viaTable('lesson', ['id' => 'lesson_id'])->andWhere('lesson_date.ldate = \''.date('Y-m-d').'\'');
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBeacon_lesson()
+    {
+        return $this->hasMany(BeaconLesson::className(), ['lesson_id' => 'id'])
+            ->viaTable('lesson', ['id' => 'lesson_id']);
+    }
+
     public function fields()
     {
         $fields = parent::fields();
@@ -93,6 +102,7 @@ class LessonLecturer extends \yii\db\ActiveRecord
         $fields[] = 'lesson';
         $fields[] = 'venue';
         $fields[] = 'lesson_date';
+        $fields[] = 'beacon_lesson';
         return $fields;
     }
 }
